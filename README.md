@@ -140,6 +140,24 @@ The audit command scans all three locations and derives status automatically.
 DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14) -> SHIP (15-17)
 ```
 
+## Typical Workflow
+
+```
+1. /product-incubation:init        Scaffold baseline docs (product or feature mode)
+         ↓
+2. Brainstorm each area            Fill in specs with research + decisions
+         ↓
+3. Plan mode                       Create implementation plan from ROAD milestones
+         ↓
+4. Build                           Implement with REQ traceability tags
+         ↓
+5. /product-incubation:audit       Check coverage, close ◐ build gaps (missing tests)
+         ↓
+6. Pick next milestone             Repeat from step 3
+```
+
+Run audit **before** picking the next milestone — this surfaces code without tests (`◐ build` state) so you close gaps before accumulating test debt.
+
 ## Prerequisites
 
 - **Claude Code** with plugin support
