@@ -32,8 +32,7 @@ Traceability: 24 defined, 18 in code, 14 in tests (58%)
 ## Install
 
 ```bash
-claude plugin add https://github.com/mileschen1217/product_incubation   # from GitHub
-claude plugin add ~/miles/claude_plugins/product-incubation              # local
+claude plugin add https://github.com/mileschen1217/product_incubation
 ```
 
 ## Commands
@@ -127,9 +126,9 @@ Syncs traceability status to Linear. Requires Linear MCP server.
 Requirements are tracked by convention — no separate status file to maintain:
 
 ```
-Spec file:  ### FUNC-001: CAD file upload
+Spec file:  ### FUNC-001: User login
 Code:       # REQ: FUNC-001
-Test:       test_FUNC_001_cad_upload_extracts_blocks
+Test:       test_FUNC_001_user_login_validates_credentials
 ```
 
 The audit command scans all three locations and derives status automatically.
