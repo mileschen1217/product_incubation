@@ -1,6 +1,6 @@
 ---
-name: sync
-description: Sync traceability status to Linear — creates/updates/closes issues based on requirement IDs found in specs, code, and tests.
+description: Sync traceability status to Linear — creates/updates/closes issues based on requirement IDs found in specs, code, and tests across the 17-area checklist.
+disable-model-invocation: true
 ---
 
 # Product Incubation: Sync to Linear
@@ -10,10 +10,10 @@ You are syncing the project's traceability status to Linear issues. This builds 
 ## Prerequisites
 
 Before running this command:
-1. Linear MCP server must be connected (check with `/mcp`)
+1. Linear MCP server must be connected
 2. User must have specified a Linear team/project to sync to
 
-If Linear MCP is not available, inform the user and suggest:
+Attempt to use a Linear MCP tool (e.g., list teams). If the tool is unavailable or errors, inform the user and suggest:
 - Setting up the Linear MCP server: `claude mcp add linear`
 - Or using the audit command instead: `/product-incubation:audit`
 
@@ -21,11 +21,13 @@ If Linear MCP is not available, inform the user and suggest:
 
 ### 1. Run the audit scan
 
-Perform the same scanning logic as the audit command:
+Perform the same scanning logic as the audit command (17 areas):
 - Scan `docs/` for requirement ID definitions
 - Scan source code for `REQ: {PREFIX}-{NNN}` references
 - Scan test files for `test_{PREFIX}_{NNN}_*` patterns
 - Determine status for each requirement (todo/build/done)
+
+The 17 prefixes are: `VIS`, `USR`, `KPI`, `FUNC`, `DATA`, `API`, `UX`, `ARCH`, `SEC`, `PERF`, `I18N`, `DEC`, `TEST`, `OBS`, `DEPLOY`, `OPS`, `ROAD`.
 
 ### 2. Ask for Linear target
 
@@ -71,7 +73,7 @@ Compare the current scan results with previous `product-status.yaml`:
 | Change | Action |
 |--------|--------|
 | New requirement ID (not in YAML) | Create Linear issue |
-| Status changed (e.g., todo → build) | Update Linear issue status |
+| Status changed (e.g., todo -> build) | Update Linear issue status |
 | Requirement removed from specs | Flag for review (add comment, do NOT auto-close) |
 | No change | Skip |
 
@@ -93,7 +95,7 @@ Compare the current scan results with previous `product-status.yaml`:
 
 **For status updates:**
 - Transition the issue to the mapped Linear status
-- Add comment: `Status changed: {old} → {new} (synced by product-incubation)`
+- Add comment: `Status changed: {old} -> {new} (synced by product-incubation)`
 
 **For removed requirements:**
 - Add comment: `Warning: Requirement {PREFIX}-{NNN} no longer found in specs. Review whether this issue should be closed.`
@@ -119,14 +121,14 @@ Created: {n} new issues
   + [TEAM-124] SEC-004: Threat model
 
 Updated: {n} issues
-  ~ [TEAM-456] SEC-003: todo → build
+  ~ [TEAM-456] SEC-003: todo -> build
 
 Flagged for review: {n} issues
   ? [TEAM-789] FUNC-002: Removed from specs
 
 Unchanged: {n} issues
 
-Total synced: {n} requirements → {n} Linear issues
+Total synced: {n} requirements -> {n} Linear issues
 ```
 
 ### 8. Rules

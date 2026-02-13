@@ -1,11 +1,11 @@
 ---
-area: FUNC          # VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, STACK, SEC, PERF, I18N, TEST, OBS, DEPLOY, OPS, ROAD, DEC
+area: FUNC          # VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, DEC, TEST, OBS, DEPLOY, OPS, ROAD
 title: Feature Name
 status: draft       # draft | review | approved
 date: YYYY-MM-DD
 ---
 
-# {AREA}-{SEQ}: {Title}
+# {PREFIX}-{NNN}: {Title}
 
 ## Context
 
@@ -32,8 +32,8 @@ Clear description of what must be true when this is done.
 
 ## Dependencies
 
-- Depends on: {PREFIX}-{SEQ} (if any)
-- Blocks: {PREFIX}-{SEQ} (if any)
+- Depends on: {PREFIX}-{NNN} (if any)
+- Blocks: {PREFIX}-{NNN} (if any)
 
 ## Notes
 

@@ -1,7 +1,7 @@
 ---
 status: accepted    # proposed | accepted | deprecated | superseded
 date: YYYY-MM-DD
-decision: DEC-{SEQ}
+decision: DEC-{NNN}
 ---
 
 # {Short Title of Decision}
@@ -43,5 +43,5 @@ Brief description. Why rejected.
 
 ## References
 
-- Related requirements: {PREFIX}-{SEQ}
-- Related decisions: DEC-{SEQ}
+- Related requirements: {PREFIX}-{NNN}
+- Related decisions: DEC-{NNN}

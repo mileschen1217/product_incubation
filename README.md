@@ -1,28 +1,28 @@
 # product-incubation
 
-A Claude Code plugin for systematic product incubation — ensures cross-cutting concerns (security, observability, i18n, auth) are planned upfront, not bolted on later.
+A Claude Code plugin for systematic product and feature incubation — ensures cross-cutting concerns (security, observability, i18n, auth) are planned upfront, not bolted on later.
 
 ## What it does
 
-Tracks 18 product areas across 5 layers, with automatic traceability from specs to code to tests:
+Tracks 17 product areas across 5 groups, with automatic traceability from specs to code to tests. Supports both **product mode** (full 17 areas) and **feature mode** (focused subset of ~10 areas).
 
 ```
 Product Health Audit — My Project
 ══════════════════════════════════
 
-Layer 1: WHY
-  Problem & Vision ·················· 100%
+WHY
+  Problem & Vision [product] ·········· 100%
     ✓ done   VIS-001 Problem statement     (code ✓ test ✓)
     ✓ done   VIS-002 Target user           (code ✓ test ✓)
 
-Layer 3: HOW
-  Security ·························· 75%
+HOW
+  Security [core] ····················· 75%
     ✓ done   SEC-001 JWT auth              (code ✓ test ✓)
     ✓ done   SEC-002 User scoping          (code ✓ test ✓)
     ◐ build  SEC-003 Input validation      (code ✓ test ✗)
     ○ todo   SEC-004 Threat model
 
-  Performance ······················· 0%
+  Performance [core] ·················· 0%
     (no requirements defined)
 
 Gaps: Performance, Maintenance & Ops
@@ -32,21 +32,36 @@ Traceability: 24 defined, 18 in code, 14 in tests (58%)
 ## Install
 
 ```bash
-claude plugins add ~/miles/claude_plugins/product-incubation   # local
-claude plugins add <github-url>                                 # from GitHub
+claude plugin add ~/miles/claude_plugins/product-incubation    # local
+claude plugin add <github-url>                                  # from GitHub
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/product-incubation:init` | Scaffold docs structure from the 18-area checklist |
+| `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
 | `/product-incubation:audit` | Scan project and report area completeness + gaps |
 | `/product-incubation:sync` | Push traceability status to Linear issues |
 
 ### `/product-incubation:init`
 
-Scaffolds your project's documentation structure. Asks which phase you're in and creates starter files for all relevant areas without overwriting existing docs.
+Scaffolds your project's documentation structure. Asks two questions:
+
+1. **Scope mode** — Product (full 17 areas) or Feature (focused subset)
+2. **Phase** — DISCOVER, SPECIFY, ARCHITECT, or BUILD+
+
+Creates starter files for all relevant areas without overwriting existing docs.
+
+**Example:**
+```
+> /product-incubation:init
+What are you incubating? → Feature
+Which domains? → Frontend, Backend
+Which phase? → SPECIFY
+
+Created 7 starter files for areas: USR, FUNC, DATA, API, UX, ARCH, DEC
+```
 
 ### `/product-incubation:audit`
 
@@ -55,36 +70,57 @@ Scans your project using Glob/Grep/Read (no external dependencies):
 - Finds `# REQ: FUNC-001` references in source code
 - Finds `test_FUNC_001_*` patterns in test files
 - Derives status automatically: spec only = todo, spec+code = build, spec+code+tests = done
+- Shows scope tags so you know which areas apply to your mode
 
 ### `/product-incubation:sync`
 
 Syncs traceability status to Linear. Requires Linear MCP server.
 - Creates issues for new requirements
-- Transitions issues when status changes (todo → build → done)
+- Transitions issues when status changes (todo -> build -> done)
 - Flags removed requirements for review (never auto-closes)
 
-## The 18 Areas
+## Product vs Feature Mode
 
-| Layer | # | Area | Prefix |
-|-------|---|------|--------|
-| **WHY** | 1 | Problem & Vision | `VIS` |
-| | 2 | User Scenarios | `USR` |
-| | 3 | Success Metrics | `KPI` |
-| **WHAT** | 4 | Functional Spec | `FUNC` |
-| | 5 | Data Model | `DATA` |
-| | 6 | API Contract | `API` |
-| | 7 | UX/UI Spec | `UX` |
-| **HOW** | 8 | Tech Architecture | `ARCH` |
-| | 9 | Tech Stack | `STACK` |
-| | 10 | Security | `SEC` |
-| | 11 | Performance | `PERF` |
-| | 12 | i18n / L10n | `I18N` |
-| **QUALITY** | 13 | Test Strategy | `TEST` |
-| | 14 | Observability | `OBS` |
-| | 15 | Deployment | `DEPLOY` |
-| | 16 | Maintenance & Ops | `OPS` |
-| **TRACKING** | 17 | Roadmap & Milestones | `ROAD` |
-| | 18 | Decision Log | `DEC` |
+| | Product Mode | Feature Mode |
+|---|---|---|
+| **Use for** | New products, platforms, services | Features within existing products |
+| **Areas** | All 17 | ~10 core areas |
+| **Skips** | Nothing | VIS, KPI, OBS, OPS, ROAD |
+| **Conditionally adds** | N/A | DEPLOY (if infra), I18N (if multi-locale) |
+
+## The 17 Areas
+
+| Group | # | Area | Prefix | Scope |
+|-------|---|------|--------|-------|
+| **WHY** | 1 | Problem & Vision | `VIS` | `product` |
+| | 2 | User Scenarios | `USR` | `core` |
+| | 3 | Success Metrics | `KPI` | `product` |
+| **WHAT** | 4 | Functional Spec | `FUNC` | `core` |
+| | 5 | Data Model | `DATA` | `core` `domain:backend` |
+| | 6 | API Contract | `API` | `core` `domain:backend` |
+| | 7 | UX/UI Spec | `UX` | `core` `domain:frontend` |
+| **HOW** | 8 | Tech Architecture | `ARCH` | `core` |
+| | 9 | Security | `SEC` | `core` |
+| | 10 | Performance | `PERF` | `core` |
+| | 11 | i18n / L10n | `I18N` | `domain:frontend` |
+| | 12 | Decision Log | `DEC` | `core` |
+| **QUALITY** | 13 | Test Strategy | `TEST` | `core` |
+| | 14 | Observability | `OBS` | `product` |
+| | 15 | Deployment | `DEPLOY` | `core` `domain:infra` |
+| | 16 | Maintenance & Ops | `OPS` | `product` |
+| **TRACKING** | 17 | Roadmap & Milestones | `ROAD` | `product` |
+
+### Scope Tags
+
+| Tag | Meaning |
+|-----|---------|
+| `core` | Always relevant (product or feature) |
+| `product` | Product-level only — skip for feature work |
+| `domain:frontend` | When work touches frontend |
+| `domain:backend` | When work touches backend |
+| `domain:infra` | When work touches deployment/infra |
+
+> **Note:** Tech stack choices are decision records — use `DEC` prefix and the decision template.
 
 ## Traceability System
 
@@ -101,7 +137,7 @@ The audit command scans all three locations and derives status automatically.
 ## Lifecycle Phases
 
 ```
-DISCOVER (1-3) → SPECIFY (4-7) → ARCHITECT (8-12) → BUILD → VALIDATE (13-14) → SHIP (15-18)
+DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14) -> SHIP (15-17)
 ```
 
 ## Prerequisites
