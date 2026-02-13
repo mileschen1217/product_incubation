@@ -32,8 +32,8 @@ Traceability: 24 defined, 18 in code, 14 in tests (58%)
 ## Install
 
 ```bash
-claude plugin add ~/miles/claude_plugins/product-incubation    # local
-claude plugin add <github-url>                                  # from GitHub
+claude plugin add https://github.com/mileschen1217/product_incubation   # from GitHub
+claude plugin add ~/miles/claude_plugins/product-incubation              # local
 ```
 
 ## Commands
@@ -168,20 +168,23 @@ Run audit **before** picking the next milestone — this surfaces code without t
 
 1. Sign up or log in at [linear.app](https://linear.app)
 2. Go to **Settings → Account → API** (or visit `linear.app/settings/api`)
-3. Click **Create key**, give it a label (e.g. "Claude Code"), and copy the token
+3. Click **Create key**, give it a label (e.g. "Claude Code"), and copy the token (starts with `lin_api_`)
+
+> **Security note:** Linear personal API keys grant full workspace access. Store the key in a `.env` file or your shell profile (`~/.zshrc` / `~/.bashrc`) — avoid pasting it directly into one-off terminal commands, as those persist in shell history.
 
 #### 2. Set up the Linear MCP server
 
-```bash
-claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
-```
-
-When prompted, provide the API key from step 1. Alternatively, set it as an environment variable first:
+Add the API key to your shell profile or a `.env` file, then register the MCP server:
 
 ```bash
+# In ~/.zshrc or ~/.bashrc — add this line, then restart your shell:
 export LINEAR_API_KEY="lin_api_..."
+
+# Then register the MCP server:
 claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
 ```
+
+> The `@anthropic-ai/linear-mcp-server` package is maintained by Anthropic. Always verify the `@anthropic-ai/` scope before installing MCP servers from npm.
 
 Verify the connection works by running Claude Code and asking it to list your Linear teams.
 
@@ -192,6 +195,8 @@ The sync command will ask you which team and (optionally) project to target. Bef
 1. Make sure you have at least one **team** in Linear (e.g. "Engineering", "Product")
 2. Optionally create a **project** to group incubation issues (e.g. "My App — Product Incubation")
 3. If you skip the project, issues land in the team's backlog
+
+> **Public repos:** The sync command generates a `product-status.yaml` file containing Linear team keys and issue IDs. If your repository is public, add `product-status.yaml` to your `.gitignore` to avoid exposing internal project management details.
 
 ## License
 
