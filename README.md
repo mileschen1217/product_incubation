@@ -161,7 +161,37 @@ Run audit **before** picking the next milestone — this surfaces code without t
 ## Prerequisites
 
 - **Claude Code** with plugin support
-- **Linear MCP server** (for `/product-incubation:sync` only)
+
+### Linear Integration (for `/product-incubation:sync` only)
+
+#### 1. Create a Linear account and API key
+
+1. Sign up or log in at [linear.app](https://linear.app)
+2. Go to **Settings → Account → API** (or visit `linear.app/settings/api`)
+3. Click **Create key**, give it a label (e.g. "Claude Code"), and copy the token
+
+#### 2. Set up the Linear MCP server
+
+```bash
+claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
+```
+
+When prompted, provide the API key from step 1. Alternatively, set it as an environment variable first:
+
+```bash
+export LINEAR_API_KEY="lin_api_..."
+claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
+```
+
+Verify the connection works by running Claude Code and asking it to list your Linear teams.
+
+#### 3. Prepare a Linear team and project
+
+The sync command will ask you which team and (optionally) project to target. Before your first sync:
+
+1. Make sure you have at least one **team** in Linear (e.g. "Engineering", "Product")
+2. Optionally create a **project** to group incubation issues (e.g. "My App — Product Incubation")
+3. If you skip the project, issues land in the team's backlog
 
 ## License
 

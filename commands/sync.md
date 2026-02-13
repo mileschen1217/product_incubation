@@ -9,13 +9,34 @@ You are syncing the project's traceability status to Linear issues. This builds 
 
 ## Prerequisites
 
-Before running this command:
-1. Linear MCP server must be connected
-2. User must have specified a Linear team/project to sync to
+Before running this command, the user needs three things set up:
 
-Attempt to use a Linear MCP tool (e.g., list teams). If the tool is unavailable or errors, inform the user and suggest:
-- Setting up the Linear MCP server: `claude mcp add linear`
-- Or using the audit command instead: `/product-incubation:audit`
+### 1. Linear account with API key
+
+The user must have a Linear account and a personal API key. If they don't have one, guide them:
+
+1. Sign up or log in at [linear.app](https://linear.app)
+2. Go to **Settings → Account → API** (or `linear.app/settings/api`)
+3. Create a key and copy the token (starts with `lin_api_`)
+
+### 2. Linear MCP server connected
+
+The Linear MCP server must be registered with Claude Code. If not set up:
+
+```bash
+export LINEAR_API_KEY="lin_api_..."
+claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
+```
+
+### 3. Linear team (and optionally a project)
+
+The user must have at least one team in Linear. A project is optional — if skipped, issues land in the team backlog.
+
+### Pre-flight check
+
+Attempt to use a Linear MCP tool (e.g., list teams). If the tool is unavailable or errors, inform the user which prerequisite is missing and suggest:
+- Setting up the Linear MCP server (see above)
+- Or using the audit command as a dry-run alternative: `/product-incubation:audit`
 
 ## Steps
 
