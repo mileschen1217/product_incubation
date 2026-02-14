@@ -1,5 +1,5 @@
 ---
-description: Scan project artifacts and report area-level completeness with per-requirement kanban. Shows traceability from specs to code to tests across the 17-area checklist.
+description: Scan project artifacts and report area-level completeness across the 17-area checklist.
 allowed-tools: [Read, Glob, Grep]
 disable-model-invocation: true
 ---
@@ -65,7 +65,7 @@ For each requirement ID found in step 2:
 For each of the 17 areas:
 - Count requirements with status `done` vs total requirements
 - Percentage = `done / total * 100` (round to nearest integer)
-- If no requirements defined for an area, show `(no requirements defined)`
+- If no requirements defined for an area, mark as `—` (no reqs)
 
 ### 7. Output the report
 
@@ -76,74 +76,48 @@ Product Health Audit — {Project Name}
 ══════════════════════════════════════
 
 WHY
-  Problem & Vision [product] ·········· {pct}%
-    ✓ done   VIS-001 {short title}          (code ✓ test ✓)
-    ◐ build  VIS-002 {short title}          (code ✓ test ✗)
-    ○ todo   VIS-003 {short title}
-
-  User Scenarios [core] ··············· {pct}%
-    ...
-
-  Success Metrics [product] ··········· {pct}%
-    ...
+  ✓ Problem & Vision ················ 100%  (3/3)
+  ◐ User Scenarios ·················· 60%   (3/5)
+  ○ Success Metrics ·················  0%   (0/2)
 
 WHAT
-  Functional Spec [core] ·············· {pct}%
-    ...
-
-  Data Model [core, backend] ·········· {pct}%
-    ...
-
-  API Contract [core, backend] ········ {pct}%
-    ...
-
-  UX/UI Spec [core, frontend] ········· {pct}%
-    ...
+  ◐ Functional Spec ················· 40%   (4/10)
+  ○ Data Model ······················  0%   (0/3)
+  ✓ API Contract ···················· 100%  (2/2)
+  ◐ UX/UI Spec ······················ 50%   (1/2)
 
 HOW
-  Tech Architecture [core] ············ {pct}%
-    ...
-
-  Security [core] ····················· {pct}%
-    ...
-
-  Performance [core] ·················· {pct}%
-    ...
-
-  i18n / L10n [frontend] ·············· {pct}%
-    ...
-
-  Decision Log [core] ················· {pct}%
-    ...
+  ○ Tech Architecture ···············  0%   (0/1)
+  ◐ Security ························ 33%   (1/3)
+  — Performance ·····················  —    (no reqs)
+  — i18n / L10n ·····················  —    (no reqs)
+  ✓ Decision Log ···················· 100%  (2/2)
 
 QUALITY
-  Test Strategy [core] ················ {pct}%
-    ...
-
-  Observability [product] ············· {pct}%
-    ...
-
-  Deployment [core, infra] ············ {pct}%
-    ...
-
-  Maintenance & Ops [product] ········· {pct}%
-    ...
+  ○ Test Strategy ···················  0%   (0/2)
+  — Observability ···················  —    (no reqs)
+  — Deployment ······················  —    (no reqs)
+  — Maintenance & Ops ···············  —    (no reqs)
 
 TRACKING
-  Roadmap & Milestones [product] ······ {pct}%
-    ...
+  — Roadmap & Milestones ············  —    (no reqs)
 
 ══════════════════════════════════════
 Summary
   Defined: {n} requirements across {m}/17 areas
-  In code: {c} ({c/n}%)
-  In tests: {t} ({t/n}%)
-  Full traceability (spec+code+test): {d} ({d/n}%)
+  Done: {d}/{n} ({d/n}%)  ·  In code: {c}/{n}  ·  In tests: {t}/{n}
 
-Scope tags: [core] = product+feature, [product] = product only, [domain] = domain-specific
 Gaps: {list areas with 0 requirements}
 Next: {1-2 suggested actions based on gaps}
+
+Ask me to expand any area for per-requirement details.
 ```
+
+**Area-line status symbol rules:**
+- `✓` if ALL requirements in the area are `done` (100%)
+- `◐` if SOME requirements are `done` or `build` (1-99%)
+- `○` if requirements exist but NONE are `done` (0%)
+- `—` if no requirements are defined for the area
 
 ### 8. Rules
 
