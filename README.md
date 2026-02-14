@@ -1,26 +1,31 @@
 # product-incubation
 
-A Claude Code plugin for systematic product and feature incubation — ensures cross-cutting concerns (security, observability, i18n, auth) are planned upfront, not bolted on later.
+A Claude Code plugin for systematic product and feature incubation — ensures cross-cutting concerns (security, observability, i18n, auth) are planned upfront, not bolted on later. Uses [OpenSpec](https://github.com/fission-ai/openspec) for spec lifecycle management.
 
 ## What it does
 
-Tracks 17 product areas across 5 groups with status markers on spec file headings. Supports both **product mode** (full 17 areas) and **feature mode** (focused subset of ~10 areas).
+Tracks 17 product areas across 5 groups using OpenSpec's file lifecycle for status. Supports both **product mode** (full 17 areas) and **feature mode** (focused subset of ~10 areas).
 
 ```
 Product Status — My Project
 ══════════════════════════════════
 
 WHY
-  ✓ Problem & Vision ················ 100%  (2/2)
-  ◐ User Scenarios ·················· 60%   (3/5)
+  ✓ Problem & Vision ················ 100%  (1/1)
+  ◐ User Scenarios ··················  0%   (0/1)
 
 HOW
-  ◐ Security ························ 50%   (2/4)
+  ◐ Security ························  0%   (0/1)
   ○ Performance ·····················  0%   (0/1)
 
 Gaps: Performance, Maintenance & Ops
-Done: 12/24 (50%)  ·  In progress: 5/24
+Done: 5/12  ·  In progress: 3/12
 ```
+
+## Prerequisites
+
+- **Claude Code** with plugin support
+- **OpenSpec CLI** — `npm install -g @fission-ai/openspec`
 
 ## Install
 
@@ -36,18 +41,17 @@ Done: 12/24 (50%)  ·  In progress: 5/24
 
 | Command | Description |
 |---------|-------------|
-| `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
-| `/product-incubation:status` | Read spec files and report area completeness + gaps |
-| `/product-incubation:refresh` | Add missing requirement IDs and update status markers |
+| `/product-incubation:init` | Initialize OpenSpec with product-incubation schema and manifest |
+| `/product-incubation:status` | Read manifest and OpenSpec state, report area completeness dashboard |
 
 ### `/product-incubation:init`
 
-Scaffolds your project's documentation structure. Asks two questions:
+Sets up the product incubation framework for your project. Asks two questions:
 
 1. **Scope mode** — Product (full 17 areas) or Feature (focused subset)
 2. **Phase** — DISCOVER, SPECIFY, ARCHITECT, or BUILD+
 
-Creates starter files for all relevant areas without overwriting existing docs.
+Installs the `product-incubation` OpenSpec schema and generates `openspec/incubation.yaml` (the manifest mapping all 17 areas to OpenSpec capabilities).
 
 **Example:**
 ```
@@ -56,25 +60,19 @@ What are you incubating? → Feature
 Which domains? → Frontend, Backend
 Which phase? → SPECIFY
 
-Created 7 starter files for areas: USR, FUNC, DATA, API, UX, ARCH, DEC
+Schema: product-incubation (installed to openspec/schemas/)
+Manifest: openspec/incubation.yaml (17 areas defined)
+Active areas: 10 of 17
 ```
 
 ### `/product-incubation:status`
 
-Reads spec files using Glob/Grep/Read (no external dependencies):
-- Finds requirement headings (`### FUNC-001: Title ✓`) in spec files
-- Reads status from markers: `✓` = done, `◐` = in progress, no marker = not started
-- Shows per-area completeness percentages and a compact dashboard
+Reads the incubation manifest and OpenSpec file structure:
+- Specs in `openspec/specs/` → done
+- Specs in `openspec/changes/*/specs/` → in progress
+- Not found → not started
 
-### `/product-incubation:refresh`
-
-Adds missing requirement IDs and updates status markers on existing docs. Useful when adopting the plugin on a project that already has documentation.
-
-Two modes, detected automatically:
-- **First run** — Docs exist but lack `### PREFIX-NNN:` headings. Scans doc content to propose IDs and status markers.
-- **Update** — IDs already exist. Uses `git` history to find recently changed requirements and proposes marker updates.
-
-All changes are shown as diffs for approval before writing. Never deletes IDs or downgrades markers.
+Shows per-area status and a compact dashboard grouped by WHY/WHAT/HOW/QUALITY/TRACKING.
 
 ## Product vs Feature Mode
 
@@ -87,25 +85,30 @@ All changes are shown as diffs for approval before writing. Never deletes IDs or
 
 ## The 17 Areas
 
-| Group | # | Area | Prefix | Scope |
-|-------|---|------|--------|-------|
-| **WHY** | 1 | Problem & Vision | `VIS` | `product` |
-| | 2 | User Scenarios | `USR` | `core` |
-| | 3 | Success Metrics | `KPI` | `product` |
-| **WHAT** | 4 | Functional Spec | `FUNC` | `core` |
-| | 5 | Data Model | `DATA` | `core` `domain:backend` |
-| | 6 | API Contract | `API` | `core` `domain:backend` |
-| | 7 | UX/UI Spec | `UX` | `core` `domain:frontend` |
-| **HOW** | 8 | Tech Architecture | `ARCH` | `core` |
-| | 9 | Security | `SEC` | `core` |
-| | 10 | Performance | `PERF` | `core` |
-| | 11 | i18n / L10n | `I18N` | `domain:frontend` |
-| | 12 | Decision Log | `DEC` | `core` |
-| **QUALITY** | 13 | Test Strategy | `TEST` | `core` |
-| | 14 | Observability | `OBS` | `product` |
-| | 15 | Deployment | `DEPLOY` | `core` `domain:infra` |
-| | 16 | Maintenance & Ops | `OPS` | `product` |
-| **TRACKING** | 17 | Roadmap & Milestones | `ROAD` | `product` |
+| Group | # | Area | Prefix | Scope | Type |
+|-------|---|------|--------|-------|------|
+| **WHY** | 1 | Problem & Vision | `VIS` | `product` | document |
+| | 2 | User Scenarios | `USR` | `core` | requirement |
+| | 3 | Success Metrics | `KPI` | `product` | document |
+| **WHAT** | 4 | Functional Spec | `FUNC` | `core` | requirement |
+| | 5 | Data Model | `DATA` | `core` `domain:backend` | requirement |
+| | 6 | API Contract | `API` | `core` `domain:backend` | requirement |
+| | 7 | UX/UI Spec | `UX` | `core` `domain:frontend` | requirement |
+| **HOW** | 8 | Tech Architecture | `ARCH` | `core` | requirement |
+| | 9 | Security | `SEC` | `core` | requirement |
+| | 10 | Performance | `PERF` | `core` | requirement |
+| | 11 | i18n / L10n | `I18N` | `domain:frontend` | requirement |
+| | 12 | Decision Log | `DEC` | `core` | document |
+| **QUALITY** | 13 | Test Strategy | `TEST` | `core` | requirement |
+| | 14 | Observability | `OBS` | `product` | requirement |
+| | 15 | Deployment | `DEPLOY` | `domain:infra` | requirement |
+| | 16 | Maintenance & Ops | `OPS` | `product` | requirement |
+| **TRACKING** | 17 | Roadmap & Milestones | `ROAD` | `product` | document |
+
+### Area Types
+
+- **Requirement areas** (13): Use `### Requirement:` + `#### Scenario:` with WHEN/THEN format
+- **Document areas** (4: VIS, KPI, DEC, ROAD): Use area-specific section templates (narrative format)
 
 ### Scope Tags
 
@@ -117,20 +120,6 @@ All changes are shown as diffs for approval before writing. Never deletes IDs or
 | `domain:backend` | When work touches backend |
 | `domain:infra` | When work touches deployment/infra |
 
-> **Note:** Tech stack choices are decision records — use `DEC` prefix and the decision template.
-
-## Status Tracking
-
-Status lives in spec files as markers on requirement headings:
-
-```markdown
-### FUNC-001: User login ✓        # done
-### FUNC-002: Password reset ◐    # in progress
-### FUNC-003: OAuth integration    # not started
-```
-
-The status command reads these markers and reports a dashboard.
-
 ## Lifecycle Phases
 
 ```
@@ -140,28 +129,20 @@ DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14)
 ## Typical Workflow
 
 ```
-1. /product-incubation:init        Scaffold baseline docs (product or feature mode)
+1. /product-incubation:init        Set up OpenSpec + manifest (product or feature mode)
          ↓
-2. /product-incubation:refresh     Add requirement IDs to existing docs (if adopting)
+2. openspec change new <name>      Start work on an area
          ↓
-3. Brainstorm each area            Fill in specs with research + decisions
+3. Write proposal + specs          Define requirements (requirement or document format)
          ↓
-4. Plan mode                       Create implementation plan from ROAD milestones
+4. openspec archive <name>         Archive completed specs (marks area as done)
          ↓
-5. Build                           Implement, mark requirements ◐ then ✓ in specs
+5. /product-incubation:status      Check coverage, find gaps
          ↓
-6. /product-incubation:refresh     Update markers based on project state
-         ↓
-7. /product-incubation:status      Check coverage, find gaps
-         ↓
-8. Pick next milestone             Repeat from step 4
+6. Pick next area                  Repeat from step 2
 ```
 
-Run status **before** picking the next milestone — this surfaces incomplete requirements so you close gaps before moving on.
-
-## Prerequisites
-
-- **Claude Code** with plugin support
+Run status **before** picking the next area — this surfaces incomplete areas so you close gaps before moving on.
 
 ## License
 
