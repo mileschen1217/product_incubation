@@ -94,6 +94,7 @@ Gaps: {list areas with 0 requirements}
 Next: {1-2 suggested actions based on gaps}
 
 Ask me to update any requirement's status.
+Run `/product-incubation:refresh` to add missing IDs and update markers.
 ```
 
 **Area-line status symbol rules:**

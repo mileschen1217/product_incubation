@@ -152,4 +152,5 @@ Skipped (out of scope for this mode):
 Next steps:
   1. Fill in the first spec file — start with the earliest area
   2. Run `/product-incubation:status` to check completeness as you go
+  3. Run `/product-incubation:refresh` to add requirement IDs to existing docs
 ```

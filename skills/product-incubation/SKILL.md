@@ -126,7 +126,7 @@ DISCOVER (Areas 1-3) -> SPECIFY (Areas 4-7) -> ARCHITECT (Areas 8-12) -> BUILD -
 ### Phase 4: BUILD
 
 **Entry:** Phase 3 complete.
-**Do:** Implement features. Update requirement headings with `◐` while in progress, `✓` when done.
+**Do:** Implement features. Update requirement headings with `◐` while in progress, `✓` when done. Use `/product-incubation:refresh` to bulk-update markers based on project state.
 **Exit:** All FUNC requirements implemented and marked `✓` in spec files.
 
 ### Phase 5: VALIDATE
@@ -204,6 +204,7 @@ Use templates from `templates/` directory (alongside this SKILL.md) for new arti
 |---------|-------------|
 | `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
 | `/product-incubation:status` | Read spec files and report area completeness + gaps |
+| `/product-incubation:refresh` | Add missing requirement IDs and update status markers |
 | `/product-incubation:sync` | Push requirement status to Linear issues |
 
 ## Common Mistakes

@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Product & feature incubation tools",
-    "version": "0.2.0-beta.1"
+    "version": "0.3.0-beta.1"
   },
   "plugins": [
     {
       "name": "product-incubation",
       "source": "./",
       "description": "Systematic product & feature incubation — 17-area checklist with scope tags, status tracking via spec markers, product and feature modes",
-      "version": "0.2.0-beta.1",
+      "version": "0.3.0-beta.1",
       "strict": true
     }
   ]

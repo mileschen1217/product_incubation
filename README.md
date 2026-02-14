@@ -38,6 +38,7 @@ Done: 12/24 (50%)  ·  In progress: 5/24
 |---------|-------------|
 | `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
 | `/product-incubation:status` | Read spec files and report area completeness + gaps |
+| `/product-incubation:refresh` | Add missing requirement IDs and update status markers |
 | `/product-incubation:sync` | Push requirement status to Linear issues |
 
 ### `/product-incubation:init`
@@ -65,6 +66,16 @@ Reads spec files using Glob/Grep/Read (no external dependencies):
 - Finds requirement headings (`### FUNC-001: Title ✓`) in spec files
 - Reads status from markers: `✓` = done, `◐` = in progress, no marker = not started
 - Shows per-area completeness percentages and a compact dashboard
+
+### `/product-incubation:refresh`
+
+Adds missing requirement IDs and updates status markers on existing docs. Useful when adopting the plugin on a project that already has documentation.
+
+Two modes, detected automatically:
+- **First run** — Docs exist but lack `### PREFIX-NNN:` headings. Scans doc content to propose IDs and status markers.
+- **Update** — IDs already exist. Uses `git` history to find recently changed requirements and proposes marker updates.
+
+All changes are shown as diffs for approval before writing. Never deletes IDs or downgrades markers.
 
 ### `/product-incubation:sync`
 
@@ -139,15 +150,19 @@ DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14)
 ```
 1. /product-incubation:init        Scaffold baseline docs (product or feature mode)
          ↓
-2. Brainstorm each area            Fill in specs with research + decisions
+2. /product-incubation:refresh     Add requirement IDs to existing docs (if adopting)
          ↓
-3. Plan mode                       Create implementation plan from ROAD milestones
+3. Brainstorm each area            Fill in specs with research + decisions
          ↓
-4. Build                           Implement, mark requirements ◐ then ✓ in specs
+4. Plan mode                       Create implementation plan from ROAD milestones
          ↓
-5. /product-incubation:status      Check coverage, find gaps
+5. Build                           Implement, mark requirements ◐ then ✓ in specs
          ↓
-6. Pick next milestone             Repeat from step 3
+6. /product-incubation:refresh     Update markers based on project state
+         ↓
+7. /product-incubation:status      Check coverage, find gaps
+         ↓
+8. Pick next milestone             Repeat from step 4
 ```
 
 Run status **before** picking the next milestone — this surfaces incomplete requirements so you close gaps before moving on.
