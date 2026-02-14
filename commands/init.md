@@ -165,7 +165,7 @@ areas:
     type: requirement
   - prefix: DEPLOY
     capability: deployment
-    scope: core
+    scope: domain:infra
     group: QUALITY
     type: requirement
   - prefix: OPS

@@ -1,6 +1,6 @@
 ---
 description: Read OpenSpec specs, changes, and incubation manifest to report area-level completeness across the 17-area product incubation checklist.
-allowed-tools: [Read, Glob, Grep, Bash]
+allowed-tools: [Read, Glob, Grep]
 disable-model-invocation: true
 ---
 
