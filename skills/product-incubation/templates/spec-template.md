@@ -1,5 +1,5 @@
 ---
-area: {PREFIX}      # VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, TEST, OBS, DEPLOY, OPS, ROAD
+area: {PREFIX}      # VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, DEC, TEST, OBS, DEPLOY, OPS, ROAD
 title: {Area Title}
 status: draft       # draft | review | approved
 date: YYYY-MM-DD
