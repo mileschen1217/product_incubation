@@ -78,7 +78,11 @@ docs/decisions/
 
 ### 6. Generate starter files
 
-Based on the selected phase and scope mode, create starter files for the relevant areas. Use the templates from the skill's `templates/` directory as a base.
+Based on the selected phase and scope mode, create starter files for the relevant areas.
+
+**Template usage:** Use `templates/spec-template.md` as a structural base, but **adapt the sections for each area**. The template includes a comment listing per-area section guidance — use the "Done when" criteria from SKILL.md as section headings. For example, a VIS file should have "Problem Statement", "Target User", "Market Context" sections — not "Input/Process/Output".
+
+**Decision records:** For the DEC area, use `templates/decision-template.md`. Create one sample file `docs/decisions/DEC-001-template.md` so the directory isn't empty and users can see the expected format.
 
 **Skip any area not in the active area set** (feature mode filters out `product`-scoped areas and unselected domain areas).
 
@@ -106,12 +110,20 @@ Based on the selected phase and scope mode, create starter files for the relevan
 | Security | SEC | `docs/security.md` | Security model |
 | Performance | PERF | `docs/specs/PERF-targets.md` | Performance targets |
 | i18n / L10n | I18N | `docs/specs/I18N-plan.md` | i18n plan |
-| Decision Log | DEC | `docs/decisions/` | Decision log directory (use decision template) |
+| Decision Log | DEC | `docs/decisions/DEC-001-template.md` | Sample decision record (use decision template) |
 | Test Strategy | TEST | `docs/specs/TEST-strategy.md` | Test strategy |
 | Observability | OBS | `docs/observability.md` | Observability plan |
 | Deployment | DEPLOY | `docs/specs/DEPLOY-plan.md` | Deployment plan |
 | Maintenance & Ops | OPS | `docs/specs/OPS-runbooks.md` | Ops & maintenance |
 | Roadmap | ROAD | `docs/PROJECT-STATUS.md` | Roadmap & milestones |
+
+**Non-area utility files** — also create these (not tied to a specific area):
+
+| File | Content |
+|------|---------|
+| `docs/development.md` | Dev setup guide (prerequisites, build steps, local dev workflow) |
+
+These are always created regardless of scope mode or phase, since they're useful from day one.
 
 **IMPORTANT:** Never overwrite existing files. Only create files that don't exist yet.
 

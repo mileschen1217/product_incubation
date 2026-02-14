@@ -191,7 +191,7 @@ docs/
   architecture.md                 # System architecture
   security.md                     # Security model
   observability.md                # Observability plan
-  development.md                  # Dev setup guide
+  development.md                  # Dev setup guide (non-area utility — no prefix)
   PROJECT-STATUS.md               # Roadmap & status
 product-status.yaml               # External sync state (if using integrations)
 ```
