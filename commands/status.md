@@ -38,25 +38,25 @@ Exclude areas where `scope` is `product` (VIS, KPI, OBS, OPS, ROAD).
 
 ### 3. Scan for done areas
 
-Use Glob to find archived specs:
+Use Glob to find archived specs (use the project root as the `path`):
 
 ```
 openspec/specs/*/spec.md
 ```
 
-For each found spec, extract the capability name from the directory (e.g., `openspec/specs/user-scenarios/spec.md` → capability `user-scenarios`). Match against the manifest's `capability` field to identify which area it belongs to.
+For each found spec file, extract the capability name from the parent directory (e.g., `openspec/specs/user-scenarios/spec.md` → capability `user-scenarios`). Match against the manifest's `capability` field to identify which area it belongs to.
 
 An area is **done** if it has a matching spec in `openspec/specs/`.
 
 ### 4. Scan for in-progress areas
 
-Use Glob to find active changes that contain specs:
+Use Glob to find active changes that contain spec files (use the project root as the `path`):
 
 ```
-openspec/changes/*/specs/*/
+openspec/changes/*/specs/*/spec.md
 ```
 
-For each found change spec directory, extract the capability name and match against the manifest. An area is **in-progress** if it has a matching spec in any active change but no archived spec.
+For each found spec file, extract the capability name from the grandparent directory (e.g., `openspec/changes/add-auth/specs/security/spec.md` → capability `security`). Match against the manifest. An area is **in-progress** if it has a matching spec in any active change but no archived spec.
 
 Optionally, if a `tasks.md` exists in the change directory, use Grep to count `[x]` (done) vs `[ ]` (pending) checkboxes for richer progress info.
 

@@ -24,10 +24,14 @@ Run `which openspec` via Bash. If not found, stop and tell the user:
 
 **Check OpenSpec project:**
 
-Use Glob to check if `openspec/` directory exists.
+Use Glob to check what exists: `openspec/`, `openspec/schemas/product-incubation/`, `openspec/incubation.yaml`.
 
-- If it does NOT exist, run: `openspec init --tools claude`
-- If it already exists, skip initialization and report it.
+- If `openspec/` does NOT exist → run: `openspec init --tools claude`
+- If `openspec/` exists but `openspec/schemas/product-incubation/` does NOT → schema install needed (step 5)
+- If `openspec/` exists but `openspec/incubation.yaml` does NOT → manifest generation needed (step 6)
+- If all three exist → skip setup, report "Already initialized" and show current manifest settings
+
+Report what exists and what will be created.
 
 ### 3. Ask scope mode
 
@@ -180,7 +184,9 @@ areas:
     type: document
 ```
 
-**IMPORTANT:** Always write all 17 areas to the manifest regardless of scope mode. The `scope` field on each area is used by the status command to filter display — the manifest is the complete definition.
+**IMPORTANT:**
+- Always write all 17 areas to the manifest regardless of scope mode. The `scope` field on each area is used by the status command to filter display — the manifest is the complete definition.
+- Areas MUST follow the exact canonical order shown above: VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, DEC, TEST, OBS, DEPLOY, OPS, ROAD. The status dashboard relies on this ordering to group areas correctly.
 
 ### 7. Summary
 
