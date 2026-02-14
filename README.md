@@ -4,29 +4,22 @@ A Claude Code plugin for systematic product and feature incubation — ensures c
 
 ## What it does
 
-Tracks 17 product areas across 5 groups, with automatic traceability from specs to code to tests. Supports both **product mode** (full 17 areas) and **feature mode** (focused subset of ~10 areas).
+Tracks 17 product areas across 5 groups with status markers on spec file headings. Supports both **product mode** (full 17 areas) and **feature mode** (focused subset of ~10 areas).
 
 ```
-Product Health Audit — My Project
+Product Status — My Project
 ══════════════════════════════════
 
 WHY
-  Problem & Vision [product] ·········· 100%
-    ✓ done   VIS-001 Problem statement     (code ✓ test ✓)
-    ✓ done   VIS-002 Target user           (code ✓ test ✓)
+  ✓ Problem & Vision ················ 100%  (2/2)
+  ◐ User Scenarios ·················· 60%   (3/5)
 
 HOW
-  Security [core] ····················· 75%
-    ✓ done   SEC-001 JWT auth              (code ✓ test ✓)
-    ✓ done   SEC-002 User scoping          (code ✓ test ✓)
-    ◐ build  SEC-003 Input validation      (code ✓ test ✗)
-    ○ todo   SEC-004 Threat model
-
-  Performance [core] ·················· 0%
-    (no requirements defined)
+  ◐ Security ························ 50%   (2/4)
+  ○ Performance ·····················  0%   (0/1)
 
 Gaps: Performance, Maintenance & Ops
-Traceability: 24 defined, 18 in code, 14 in tests (58%)
+Done: 12/24 (50%)  ·  In progress: 5/24
 ```
 
 ## Install
@@ -44,8 +37,8 @@ Traceability: 24 defined, 18 in code, 14 in tests (58%)
 | Command | Description |
 |---------|-------------|
 | `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
-| `/product-incubation:audit` | Scan project and report area completeness + gaps |
-| `/product-incubation:sync` | Push traceability status to Linear issues |
+| `/product-incubation:status` | Read spec files and report area completeness + gaps |
+| `/product-incubation:sync` | Push requirement status to Linear issues |
 
 ### `/product-incubation:init`
 
@@ -66,20 +59,18 @@ Which phase? → SPECIFY
 Created 7 starter files for areas: USR, FUNC, DATA, API, UX, ARCH, DEC
 ```
 
-### `/product-incubation:audit`
+### `/product-incubation:status`
 
-Scans your project using Glob/Grep/Read (no external dependencies):
-- Finds requirement IDs (`FUNC-001`, `SEC-003`) in spec files
-- Finds `# REQ: FUNC-001` references in source code
-- Finds `test_FUNC_001_*` patterns in test files
-- Derives status automatically: spec only = todo, spec+code = build, spec+code+tests = done
-- Shows scope tags so you know which areas apply to your mode
+Reads spec files using Glob/Grep/Read (no external dependencies):
+- Finds requirement headings (`### FUNC-001: Title ✓`) in spec files
+- Reads status from markers: `✓` = done, `◐` = in progress, no marker = not started
+- Shows per-area completeness percentages and a compact dashboard
 
 ### `/product-incubation:sync`
 
-Syncs traceability status to Linear. Requires Linear MCP server.
+Syncs requirement status to Linear. Requires Linear MCP server.
 - Creates issues for new requirements
-- Transitions issues when status changes (todo -> build -> done)
+- Transitions issues when status changes (not started -> in progress -> done)
 - Flags removed requirements for review (never auto-closes)
 
 ## Product vs Feature Mode
@@ -125,17 +116,17 @@ Syncs traceability status to Linear. Requires Linear MCP server.
 
 > **Note:** Tech stack choices are decision records — use `DEC` prefix and the decision template.
 
-## Traceability System
+## Status Tracking
 
-Requirements are tracked by convention — no separate status file to maintain:
+Status lives in spec files as markers on requirement headings:
 
+```markdown
+### FUNC-001: User login ✓        # done
+### FUNC-002: Password reset ◐    # in progress
+### FUNC-003: OAuth integration    # not started
 ```
-Spec file:  ### FUNC-001: User login
-Code:       # REQ: FUNC-001
-Test:       test_FUNC_001_user_login_validates_credentials
-```
 
-The audit command scans all three locations and derives status automatically.
+The status command reads these markers and reports a dashboard.
 
 ## Lifecycle Phases
 
@@ -152,14 +143,14 @@ DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14)
          ↓
 3. Plan mode                       Create implementation plan from ROAD milestones
          ↓
-4. Build                           Implement with REQ traceability tags
+4. Build                           Implement, mark requirements ◐ then ✓ in specs
          ↓
-5. /product-incubation:audit       Check coverage, close ◐ build gaps (missing tests)
+5. /product-incubation:status      Check coverage, find gaps
          ↓
 6. Pick next milestone             Repeat from step 3
 ```
 
-Run audit **before** picking the next milestone — this surfaces code without tests (`◐ build` state) so you close gaps before accumulating test debt.
+Run status **before** picking the next milestone — this surfaces incomplete requirements so you close gaps before moving on.
 
 ## Prerequisites
 

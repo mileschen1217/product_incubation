@@ -1,7 +1,7 @@
 {
   "name": "product-incubation",
-  "version": "0.1.0-beta.1",
-  "description": "Systematic product & feature incubation — 17-area checklist with scope tags, traceability from spec to code to test, product and feature modes",
+  "version": "0.2.0-beta.1",
+  "description": "Systematic product & feature incubation — 17-area checklist with scope tags, status tracking via spec markers, product and feature modes",
   "author": {
     "name": "Miles Chen"
   },

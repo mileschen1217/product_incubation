@@ -5,7 +5,13 @@ status: draft       # draft | review | approved
 date: YYYY-MM-DD
 ---
 
-# {PREFIX}-{NNN}: {Title}
+# {Area Title}
+
+## Requirements
+
+### {PREFIX}-001: [First requirement]
+
+> **Status markers:** Append `✓` (done) or `◐` (in progress) to requirement headings. No marker = not started. The `/product-incubation:status` command reads `###` headings.
 
 ## Context
 

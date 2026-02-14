@@ -12,7 +12,7 @@ You are scaffolding a project's documentation structure using the product incuba
 
 ### 1. Read the SKILL.md
 
-Read the `product-incubation` skill to load the 17-area checklist, scope tags, artifact structure, and traceability conventions.
+Read the `product-incubation` skill to load the 17-area checklist, scope tags, artifact structure, and status conventions.
 
 ### 2. Scan existing docs
 
@@ -151,5 +151,5 @@ Skipped (out of scope for this mode):
 
 Next steps:
   1. Fill in the first spec file — start with the earliest area
-  2. Run `/product-incubation:audit` to check completeness as you go
+  2. Run `/product-incubation:status` to check completeness as you go
 ```
