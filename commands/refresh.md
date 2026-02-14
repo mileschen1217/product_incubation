@@ -85,11 +85,13 @@ Use the file → prefix mapping (step 1) to determine the correct prefix for eac
 
 ### 6a. Assess status from doc content
 
-For each section that will get an ID, assess status from the **doc content only** (do NOT scan source code or test files):
+Since no requirement IDs exist yet, use **doc content quality as a heuristic proxy** to infer implementation status. Do NOT scan source code or test files — the doc itself is the best signal available on first run.
 
-- **`✓` (done):** Section has detailed spec with acceptance criteria, clear input/process/output, or thorough documentation
-- **`◐` (in progress):** Section has partial content, TODOs, open questions, or placeholder text
-- **No marker:** Section is a skeleton heading or has no meaningful content
+- **`✓` (done):** Section has detailed spec with acceptance criteria, clear input/process/output, or thorough documentation — suggests the work is implemented and verified
+- **`◐` (in progress):** Section has partial content, TODOs, open questions, or placeholder text — suggests work is in progress
+- **No marker:** Section is a skeleton heading or has no meaningful content — suggests work hasn't started
+
+> **Note:** First-run status assignment is inherently approximate. Users should review and adjust markers after the initial assignment.
 
 ## Subsequent-run mode
 
