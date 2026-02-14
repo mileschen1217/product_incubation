@@ -6,7 +6,7 @@ A Claude Code plugin for systematic product & feature incubation.
 
 ```
 .claude-plugin/plugin.json        # Plugin metadata
-commands/                          # Slash commands (init, status, refresh, sync)
+commands/                          # Slash commands (init, status, refresh)
 skills/product-incubation/         # SKILL.md + templates
 README.md                          # User-facing docs
 ```
@@ -24,7 +24,7 @@ This is a **Claude Code plugin** — it contains markdown command/skill files, n
 ## Editing Rules
 
 - All files reference the same 17 prefixes: VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, DEC, TEST, OBS, DEPLOY, OPS, ROAD
-- When changing area definitions, update ALL files: SKILL.md, init.md, status.md, refresh.md, sync.md, README.md, spec-template.md
+- When changing area definitions, update ALL files: SKILL.md, init.md, status.md, refresh.md, README.md, spec-template.md
 - Command frontmatter: no `name:` field, use `description:`, `allowed-tools:`, `disable-model-invocation: true`
 - Templates use `{PREFIX}-{NNN}` format (not `{AREA}-{SEQ}`)
 

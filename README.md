@@ -39,7 +39,6 @@ Done: 12/24 (50%)  ·  In progress: 5/24
 | `/product-incubation:init` | Scaffold docs structure — asks product or feature mode |
 | `/product-incubation:status` | Read spec files and report area completeness + gaps |
 | `/product-incubation:refresh` | Add missing requirement IDs and update status markers |
-| `/product-incubation:sync` | Push requirement status to Linear issues |
 
 ### `/product-incubation:init`
 
@@ -76,13 +75,6 @@ Two modes, detected automatically:
 - **Update** — IDs already exist. Uses `git` history to find recently changed requirements and proposes marker updates.
 
 All changes are shown as diffs for approval before writing. Never deletes IDs or downgrades markers.
-
-### `/product-incubation:sync`
-
-Syncs requirement status to Linear. Requires Linear MCP server.
-- Creates issues for new requirements
-- Transitions issues when status changes (not started -> in progress -> done)
-- Flags removed requirements for review (never auto-closes)
 
 ## Product vs Feature Mode
 
@@ -170,42 +162,6 @@ Run status **before** picking the next milestone — this surfaces incomplete re
 ## Prerequisites
 
 - **Claude Code** with plugin support
-
-### Linear Integration (for `/product-incubation:sync` only)
-
-#### 1. Create a Linear account and API key
-
-1. Sign up or log in at [linear.app](https://linear.app)
-2. Go to **Settings → Account → API** (or visit `linear.app/settings/api`)
-3. Click **Create key**, give it a label (e.g. "Claude Code"), and copy the token (starts with `lin_api_`)
-
-> **Security note:** Linear personal API keys grant full workspace access. Store the key in a `.env` file or your shell profile (`~/.zshrc` / `~/.bashrc`) — avoid pasting it directly into one-off terminal commands, as those persist in shell history.
-
-#### 2. Set up the Linear MCP server
-
-Add the API key to your shell profile or a `.env` file, then register the MCP server:
-
-```bash
-# In ~/.zshrc or ~/.bashrc — add this line, then restart your shell:
-export LINEAR_API_KEY="lin_api_..."
-
-# Then register the MCP server:
-claude mcp add linear -- npx -y @anthropic-ai/linear-mcp-server
-```
-
-> The `@anthropic-ai/linear-mcp-server` package is maintained by Anthropic. Always verify the `@anthropic-ai/` scope before installing MCP servers from npm.
-
-Verify the connection works by running Claude Code and asking it to list your Linear teams.
-
-#### 3. Prepare a Linear team and project
-
-The sync command will ask you which team and (optionally) project to target. Before your first sync:
-
-1. Make sure you have at least one **team** in Linear (e.g. "Engineering", "Product")
-2. Optionally create a **project** to group incubation issues (e.g. "My App — Product Incubation")
-3. If you skip the project, issues land in the team's backlog
-
-> **Public repos:** The sync command generates a `product-status.yaml` file containing Linear team keys and issue IDs. If your repository is public, add `product-status.yaml` to your `.gitignore` to avoid exposing internal project management details.
 
 ## License
 
