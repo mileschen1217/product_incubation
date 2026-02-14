@@ -41,7 +41,7 @@ Exclude areas where `scope` is `product` (VIS, KPI, OBS, OPS, ROAD).
 Use Glob to find archived specs (use the project root as the `path`):
 
 ```
-openspec/specs/*/spec.md
+**/openspec/specs/*/spec.md
 ```
 
 For each found spec file, extract the capability name from the parent directory (e.g., `openspec/specs/user-scenarios/spec.md` → capability `user-scenarios`). Match against the manifest's `capability` field to identify which area it belongs to.
@@ -53,7 +53,7 @@ An area is **done** if it has a matching spec in `openspec/specs/`.
 Use Glob to find active changes that contain spec files (use the project root as the `path`):
 
 ```
-openspec/changes/*/specs/*/spec.md
+**/openspec/changes/*/specs/*/spec.md
 ```
 
 For each found spec file, extract the capability name from the grandparent directory (e.g., `openspec/changes/add-auth/specs/security/spec.md` → capability `security`). Match against the manifest. An area is **in-progress** if it has a matching spec in any active change but no archived spec.
