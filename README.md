@@ -32,17 +32,11 @@ Traceability: 24 defined, 18 in code, 14 in tests (58%)
 ## Install
 
 ```bash
-# Step 1: Add the plugin as a marketplace source
+# Step 1: Add as a marketplace source
 /plugin marketplace add mileschen1217/product_incubation
 
 # Step 2: Install the plugin
 /plugin install product-incubation@mileschen1217-product_incubation
-```
-
-### Update
-
-```bash
-/plugin update product-incubation@mileschen1217-product_incubation
 ```
 
 ## Commands
