@@ -57,12 +57,14 @@ Use Grep with pattern `###\s+[A-Z][A-Z0-9]{1,5}-\d{3}:` across `docs/**/*.md` to
 
 For each prefix, track the highest existing number so you know where to auto-increment (e.g., if `SEC-001` and `SEC-002` exist, the next is `SEC-003`).
 
-### 4. Detect mode
+### 4. Detect mode per file
 
-Count how many docs have requirement IDs vs how many have content without IDs:
+Mode is determined **per file**, not globally. For each doc file, count the content sections (non-structural `##`/`###` headings) that have requirement IDs vs those that don't:
 
-- **First-run mode:** Most docs lack requirement IDs (fewer than 30% of content sections have IDs)
-- **Subsequent-run mode:** Most docs already have requirement IDs (30% or more of content sections have IDs)
+- **First-run treatment:** The file has fewer than 30% of its content sections with IDs → add missing IDs (step 5a/6a)
+- **Subsequent-run treatment:** The file has 30% or more of its content sections with IDs → update markers only (step 5b/6b)
+
+This prevents a common edge case: after `/product-incubation:init` scaffolds files with IDs, pre-existing files without IDs would incorrectly get subsequent-run treatment if mode were detected globally.
 
 ## First-run mode
 
@@ -148,7 +150,11 @@ If "Apply per-file" is selected, iterate through each file and ask:
 
 ### 9. Write changes
 
-For approved files only, use Edit to apply the changes. For new IDs, insert the `### PREFIX-NNN: Title [marker]` heading directly above the existing section content. For marker updates, modify the existing heading line.
+For approved files only, use Edit to apply the changes:
+
+- **New IDs on `##` headings:** Replace the `##` heading with a `### PREFIX-NNN: Title [marker]` heading. The original heading text becomes the requirement title. Example: `## Authentication` → `### SEC-001: Authentication ✓`
+- **New IDs on `###` headings:** Replace the `###` heading with the ID-prefixed version. Example: `### File upload` → `### FUNC-001: File upload`
+- **Marker updates:** Modify the existing heading line to append or change the marker. Example: `### FUNC-001: File upload` → `### FUNC-001: File upload ✓`
 
 ### 10. Output summary
 
