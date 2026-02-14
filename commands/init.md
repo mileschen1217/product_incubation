@@ -1,35 +1,33 @@
 ---
-description: Scaffold docs structure for a project using the 17-area product incubation checklist. Asks product or feature mode, then creates missing directories and starter spec files without overwriting existing docs.
-allowed-tools: [Read, Write, Glob, Grep, AskUserQuestion]
+description: Initialize product incubation with OpenSpec — installs schema, configures scope/phase, generates manifest. Requires openspec CLI.
+allowed-tools: [Read, Write, Glob, Grep, Bash, AskUserQuestion]
 disable-model-invocation: true
 ---
 
 # Product Incubation: Init
 
-You are scaffolding a project's documentation structure using the product incubation framework.
+You are setting up the product incubation framework for a project using OpenSpec as the spec lifecycle engine.
 
 ## Steps
 
 ### 1. Read the SKILL.md
 
-Read the `product-incubation` skill to load the 17-area checklist, scope tags, artifact structure, and status conventions.
+Read the `product-incubation` skill to load the 17-area checklist, scope tags, area types, and lifecycle phases.
 
-### 2. Scan existing docs
+### 2. Check prerequisites
 
-Use Glob to check what already exists:
+**Check OpenSpec CLI:**
 
-```
-docs/specs/**/*
-docs/plans/**/*
-docs/decisions/**/*
-docs/architecture.md
-docs/security.md
-docs/observability.md
-docs/development.md
-docs/PROJECT-STATUS.md
-```
+Run `which openspec` via Bash. If not found, stop and tell the user:
 
-Report what already exists so the user knows what will NOT be overwritten.
+> OpenSpec CLI is required. Install it with `npm install -g @fission-ai/openspec`, then re-run this command.
+
+**Check OpenSpec project:**
+
+Use Glob to check if `openspec/` directory exists.
+
+- If it does NOT exist, run: `openspec init --tools claude`
+- If it already exists, skip initialization and report it.
 
 ### 3. Ask scope mode
 
@@ -66,72 +64,123 @@ Use AskUserQuestion to ask:
 > - **ARCHITECT** — Specs exist, need tech architecture/security/perf/i18n (Areas 8-12)
 > - **BUILD+** — Architecture is set, need build/validate/ship scaffolding (Areas 13-17)
 
-### 5. Create directories
+### 5. Install schema
 
-Create any missing directories:
+Run via Bash:
 
 ```
-docs/specs/
-docs/plans/
-docs/decisions/
+openspec schema fork spec-driven product-incubation
 ```
 
-### 6. Generate starter files
+This creates a local copy at `openspec/schemas/product-incubation/`.
 
-Based on the selected phase and scope mode, create starter files for the relevant areas.
+Then copy the plugin's custom schema files over the forked copy:
 
-**Template usage:** Use `templates/spec-template.md` as a structural base, but **adapt the sections for each area**. The template includes a comment listing per-area section guidance — use the "Done when" criteria from SKILL.md as section headings. For example, a VIS file should have "Problem Statement", "Target User", "Market Context" sections — not "Input/Process/Output".
+1. Read each file from the plugin's `schemas/product-incubation/` directory (schema.yaml and all templates)
+2. Write them to `openspec/schemas/product-incubation/` (overwriting the forked spec-driven files)
 
-**Decision records:** For the DEC area, use `templates/decision-template.md`. Create one sample file `docs/decisions/DEC-001-template.md` so the directory isn't empty and users can see the expected format.
+This gives the project a product-incubation schema with the dual-format spec support (requirement + document areas).
 
-**Skip any area not in the active area set** (feature mode filters out `product`-scoped areas and unselected domain areas).
+### 6. Generate manifest
 
-**Phase priority — create files for the selected phase + all earlier phases:**
+Create `openspec/incubation.yaml` with the full 17-area definition. Use the scope mode, domains, and phase from user answers.
 
-| Phase | Areas to scaffold |
-|-------|-------------------|
-| DISCOVER | 1-3 (VIS, USR, KPI) |
-| SPECIFY | 1-7 (add FUNC, DATA, API, UX) |
-| ARCHITECT | 1-12 (add ARCH, SEC, PERF, I18N, DEC) |
-| BUILD+ | 1-17 (add TEST, OBS, DEPLOY, OPS, ROAD) |
+**Manifest format:**
 
-**File mapping:**
+```yaml
+schema: product-incubation
+mode: {product | feature}
+domains: [{selected domains, e.g., [frontend, backend]}]
+phase: {DISCOVER | SPECIFY | ARCHITECT | BUILD+}
+areas:
+  - prefix: VIS
+    capability: problem-vision
+    scope: product
+    group: WHY
+    type: document
+  - prefix: USR
+    capability: user-scenarios
+    scope: core
+    group: WHY
+    type: requirement
+  - prefix: KPI
+    capability: success-metrics
+    scope: product
+    group: WHY
+    type: document
+  - prefix: FUNC
+    capability: functional-spec
+    scope: core
+    group: WHAT
+    type: requirement
+  - prefix: DATA
+    capability: data-model
+    scope: core
+    group: WHAT
+    type: requirement
+  - prefix: API
+    capability: api-contract
+    scope: core
+    group: WHAT
+    type: requirement
+  - prefix: UX
+    capability: ux-spec
+    scope: core
+    group: WHAT
+    type: requirement
+  - prefix: ARCH
+    capability: tech-architecture
+    scope: core
+    group: HOW
+    type: requirement
+  - prefix: SEC
+    capability: security
+    scope: core
+    group: HOW
+    type: requirement
+  - prefix: PERF
+    capability: performance
+    scope: core
+    group: HOW
+    type: requirement
+  - prefix: I18N
+    capability: i18n-l10n
+    scope: domain:frontend
+    group: HOW
+    type: requirement
+  - prefix: DEC
+    capability: decision-log
+    scope: core
+    group: HOW
+    type: document
+  - prefix: TEST
+    capability: test-strategy
+    scope: core
+    group: QUALITY
+    type: requirement
+  - prefix: OBS
+    capability: observability
+    scope: product
+    group: QUALITY
+    type: requirement
+  - prefix: DEPLOY
+    capability: deployment
+    scope: core
+    group: QUALITY
+    type: requirement
+  - prefix: OPS
+    capability: maintenance-ops
+    scope: product
+    group: QUALITY
+    type: requirement
+  - prefix: ROAD
+    capability: roadmap
+    scope: product
+    group: TRACKING
+    type: document
+```
 
-| Area | Prefix | File | Content |
-|------|--------|------|---------|
-| Problem & Vision | VIS | `docs/specs/VIS-problem.md` | Vision & problem statement |
-| User Scenarios | USR | `docs/specs/USR-scenarios.md` | User scenarios |
-| Success Metrics | KPI | `docs/specs/KPI-metrics.md` | Success metrics |
-| Functional Spec | FUNC | `docs/specs/FUNC-features.md` | Functional spec (use spec template) |
-| Data Model | DATA | `docs/specs/DATA-model.md` | Data model |
-| API Contract | API | `docs/specs/API-contract.md` | API contract |
-| UX/UI Spec | UX | `docs/specs/UX-spec.md` | UX/UI spec |
-| Tech Architecture | ARCH | `docs/architecture.md` | System architecture |
-| Security | SEC | `docs/security.md` | Security model |
-| Performance | PERF | `docs/specs/PERF-targets.md` | Performance targets |
-| i18n / L10n | I18N | `docs/specs/I18N-plan.md` | i18n plan |
-| Decision Log | DEC | `docs/decisions/DEC-001-template.md` | Sample decision record (use decision template) |
-| Test Strategy | TEST | `docs/specs/TEST-strategy.md` | Test strategy |
-| Observability | OBS | `docs/observability.md` | Observability plan |
-| Deployment | DEPLOY | `docs/specs/DEPLOY-plan.md` | Deployment plan |
-| Maintenance & Ops | OPS | `docs/specs/OPS-runbooks.md` | Ops & maintenance |
-| Roadmap | ROAD | `docs/PROJECT-STATUS.md` | Roadmap & milestones |
-
-**Non-area utility files** — also create these (not tied to a specific area):
-
-| File | Content |
-|------|---------|
-| `docs/development.md` | Dev setup guide (prerequisites, build steps, local dev workflow) |
-
-These are always created regardless of scope mode or phase, since they're useful from day one.
-
-**IMPORTANT:** Never overwrite existing files. Only create files that don't exist yet.
-
-Each starter file should have:
-- Frontmatter with area prefix, title, date, status: draft
-- Section headers matching the area's "Done when" criteria from SKILL.md
-- TODO placeholders for content that needs to be filled in
-- At least one requirement ID placeholder (e.g., `### VIS-001: [Define problem statement]`)
+**IMPORTANT:** Always write all 17 areas to the manifest regardless of scope mode. The `scope` field on each area is used by the status command to filter display — the manifest is the complete definition.
 
 ### 7. Summary
 
@@ -143,26 +192,24 @@ Product Incubation — Init Complete
 
 Mode: {Product | Feature (frontend, backend)}
 Phase: {SELECTED_PHASE}
-Areas: {N} of 17
+Schema: product-incubation (installed to openspec/schemas/)
+Manifest: openspec/incubation.yaml (17 areas defined)
 
-Created:
-  ✓ docs/specs/VIS-problem.md
-  ✓ docs/specs/USR-scenarios.md
-  ✓ docs/specs/KPI-metrics.md
-  ...
+Active areas for this mode: {N} of 17
+  {list active area prefixes}
 
-Already existed (untouched):
-  · docs/architecture.md
-  · docs/security.md
-  ...
-
-Skipped (out of scope for this mode):
-  - OBS (product-only)
-  - OPS (product-only)
-  ...
+Skipped (out of scope):
+  {list skipped prefixes with reason, e.g., "OBS (product-only)"}
 
 Next steps:
-  1. Fill in the first spec file — start with the earliest area
-  2. Run `/product-incubation:status` to check completeness as you go
-  3. Run `/product-incubation:refresh` to add requirement IDs to existing docs
+  1. Create your first change: `openspec change new <name>`
+  2. Write a proposal covering the earliest area for your phase
+  3. Run `/product-incubation:status` to check area coverage
 ```
+
+## Rules
+
+- **No spec files are created** — OpenSpec manages spec lifecycle via changes
+- **Never overwrite** existing `openspec/` setup or `incubation.yaml`
+- **Always install the custom schema** — the forked spec-driven base must be overwritten with product-incubation schema files
+- **Manifest contains all 17 areas** — scope filtering happens at display time, not in the manifest
