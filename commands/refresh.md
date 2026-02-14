@@ -53,7 +53,7 @@ docs/PROJECT-STATUS.md
 
 ### 3. Find existing requirement IDs
 
-Use Grep with pattern `###\s+[A-Z]{2,6}-\d{3}:` across `docs/**/*.md` to find all existing requirement IDs.
+Use Grep with pattern `###\s+[A-Z][A-Z0-9]{1,5}-\d{3}:` across `docs/**/*.md` to find all existing requirement IDs.
 
 For each prefix, track the highest existing number so you know where to auto-increment (e.g., if `SEC-001` and `SEC-002` exist, the next is `SEC-003`).
 

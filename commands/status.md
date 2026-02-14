@@ -28,7 +28,7 @@ Look in these locations:
 - `docs/observability.md`
 - `docs/PROJECT-STATUS.md`
 
-Use Grep with pattern: `###\s+[A-Z]{2,6}-\d{3}:` across `docs/**/*.md`
+Use Grep with pattern: `###\s+[A-Z][A-Z0-9]{1,5}-\d{3}:` across `docs/**/*.md`
 
 For each match, extract:
 - The requirement ID (`{PREFIX}-{NNN}`)
