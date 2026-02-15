@@ -54,6 +54,8 @@ Use AskUserQuestion to ask:
 - `**/design/**/*.md`
 - `*.md` in the project root (exclude `README.md` boilerplate if it's just a template)
 
+**Exclude** files in `node_modules/`, `vendor/`, `.git/`, `openspec/`, and other dependency/build directories. Filter out any Glob results containing these paths.
+
 If auto-scan finds no `.md` files (or only boilerplate like an empty README), report:
 
 > Auto-scan found no substantive documents. Please specify paths manually.
@@ -102,43 +104,71 @@ Determine the primary area for each document based on its main topic:
 - User journeys, scenarios, personas → `USR` (User Scenarios)
 - Internationalization, locales, translations → `I18N` (i18n / L10n)
 
-#### Pass 2: Subsection-level scanning (CRITICAL)
+#### Pass 2: Keyword scan for EVERY unmapped area (MANDATORY)
 
-**Most project docs are multi-topic.** A single document often contains content relevant to 3-5 areas. After the file-level pass, scan EVERY document section-by-section (heading by heading) to find additional area mappings:
+Pass 1 typically maps each document to 1 primary area, leaving many areas unmapped. But most project docs are multi-topic — a single document often contains content relevant to 3-5 areas scattered across subsections.
 
-- A `security.md` may also mention logging/monitoring → `OBS`, and audit trails → `OPS`
-- An `architecture.md` may include performance targets → `PERF`, data model → `DATA`, and deployment topology → `DEPLOY`
-- A `development.md` may cover i18n setup → `I18N`, Docker commands → `DEPLOY`, seed data procedures → `OPS`, and test commands → `TEST`
-- A `PROJECT-STATUS.md` or `README.md` may embed vision → `VIS`, roadmap → `ROAD`, KPIs → `KPI`, and feature lists → `FUNC`
-- Plan documents may contain user scenarios → `USR`, API designs → `API`, and decision rationale → `DEC`
+**You MUST complete this step for every active area that has no mapping after Pass 1.** This is not optional.
 
-**For each document, use Grep to search for keywords from ALL 17 areas**, not just the primary mapping. Match at the section/paragraph level using these keyword patterns:
+**Procedure — execute this loop:**
 
-| Area | Keywords to search for |
-|------|----------------------|
-| VIS | vision, problem statement, mission, market, target user, opportunity, pain point |
-| USR | user journey, scenario, persona, workflow, end-to-end, use case |
-| KPI | KPI, success metric, adoption, conversion, retention, SLA, OKR, target, goal |
-| FUNC | feature, capability, requirement, user story, acceptance criteria, scope, behavior |
-| DATA | database, entity, schema, model, relation, migration, table, field, constraint |
-| API | API, endpoint, REST, GraphQL, request, response, status code, route, contract |
-| UX | UI, design, wireframe, mockup, component, layout, breakpoint, accessibility, a11y |
-| ARCH | architecture, system design, component, module, data flow, dependency, diagram |
-| SEC | security, authentication, authorization, OWASP, threat, vulnerability, encryption |
-| PERF | performance, latency, response time, load, scaling, cache, throughput, benchmark |
-| I18N | i18n, i18next, locale, translation, internationalization, l10n, language |
-| DEC | decision, rationale, trade-off, ADR, chose, alternative, why we |
-| TEST | test, coverage, CI, jest, pytest, playwright, vitest, e2e, unit test |
-| OBS | observability, monitoring, logging, metrics, alert, health check, error tracking, audit log |
-| DEPLOY | deployment, CI/CD, Docker, infrastructure, environment, container, pipeline, rollback |
-| OPS | operations, runbook, backup, on-call, migration, seed data, maintenance, incident |
-| ROAD | roadmap, milestone, timeline, phase, release, sprint, priority, backlog |
+1. List all active areas that have NO mapping from Pass 1
+2. For EACH unmapped area, run Grep across ALL discovered documents using the keywords below
+3. If Grep finds matches, read the surrounding context to confirm relevance, then add the mapping
+4. Only mark an area as "no source found" after Grep returns zero matches across ALL documents
 
-**The goal is zero unexamined areas.** Every active area must be explicitly searched for before declaring "no source found." If any active area has no mapping after both passes, use Grep across ALL documents for any mention of that area's keywords. Only declare "no source found" after this final sweep confirms no relevant content exists.
+**Keyword patterns for Grep** (search case-insensitive across all discovered docs):
 
-Note: Keyword-based scanning may miss content that discusses an area's concerns without using obvious keywords. The review step (Step 7) and `/product-incubation:review` catch these gaps later.
+| Area | Grep pattern (use as regex, case-insensitive) |
+|------|-----------------------------------------------|
+| VIS | `vision\|problem statement\|mission\|market\|target user\|pain point` |
+| USR | `user journey\|scenario\|persona\|workflow\|use case` |
+| KPI | `KPI\|success metric\|adoption rate\|conversion rate\|retention\|SLA\|OKR` |
+| FUNC | `feature\|capability\|requirement\|user story\|acceptance criteria` |
+| DATA | `database\|entity\|schema\|model\|relation\|table\|field\|constraint` |
+| API | `API\|endpoint\|REST\|GraphQL\|request.*response\|status code\|route` |
+| UX | `wireframe\|mockup\|breakpoint\|accessibility\|a11y\|UI component` |
+| ARCH | `architecture\|system design\|component.*boundary\|data flow\|diagram` |
+| SEC | `security\|authentication\|authorization\|OWASP\|threat\|encryption` |
+| PERF | `performance\|latency\|response time\|scaling\|cache\|throughput` |
+| I18N | `i18n\|locale\|translation\|internationalization\|l10n\|language.*switcher` |
+| DEC | `decision\|rationale\|trade-off\|ADR\|alternative.*considered` |
+| TEST | `test.*strategy\|coverage\|jest\|pytest\|playwright\|vitest\|e2e` |
+| OBS | `observability\|monitoring\|logging\|metrics\|alert\|health.check\|audit` |
+| DEPLOY | `deploy\|CI/CD\|Docker\|infrastructure\|container\|pipeline\|rollback` |
+| OPS | `runbook\|backup\|on-call\|seed.data\|maintenance\|incident\|migration.*run` |
+| ROAD | `roadmap\|milestone\|timeline\|phase\|release\|sprint\|backlog` |
 
-**Only map to active areas** — skip mappings to areas filtered out by scope mode.
+**Example execution:**
+
+After Pass 1, suppose areas PERF, I18N, OBS, OPS have no mapping. For each:
+
+```
+# PERF — search all discovered docs
+Grep: pattern="performance|latency|response time|scaling|cache" (case-insensitive)
+→ Found match in <file> line N: mentions response time target
+→ Read surrounding context: yes, this is performance-related
+→ Add mapping: <file> §<section> → PERF
+
+# I18N — search all discovered docs
+Grep: pattern="i18n|locale|translation|language.*switcher" (case-insensitive)
+→ Found match in <file> line N: mentions locale setup
+→ Add mapping: <file> §<section> → I18N
+
+# OBS — search all discovered docs
+Grep: pattern="observability|monitoring|logging|audit" (case-insensitive)
+→ Found match in <file> line N: mentions audit logging
+→ Add mapping: <file> §<section> → OBS
+
+# OPS — search all discovered docs
+Grep: pattern="runbook|backup|seed.data|maintenance|migration.*run" (case-insensitive)
+→ No matches found in any document
+→ Mark as: (no source found) → OPS
+```
+
+**After the loop, verify:** count mapped areas vs total active areas. If any area still has no mapping, that's fine — it genuinely has no source content. But you must have run the Grep for it.
+
+**Only map to active areas** — skip areas filtered out by scope mode.
 
 Present the mapping table for user confirmation using AskUserQuestion. Show ALL mappings including subsection-level ones:
 
