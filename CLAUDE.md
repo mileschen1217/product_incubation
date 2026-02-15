@@ -8,7 +8,7 @@ A Claude Code plugin for systematic product & feature incubation, backed by Open
 .claude-plugin/plugin.json        # Plugin metadata
 .claude-plugin/marketplace.json   # Marketplace listing
 schemas/product-incubation/       # OpenSpec schema (schema.yaml + templates)
-commands/                          # Slash commands (init, status)
+commands/                          # Slash commands (init, status, import, review, set-phase)
 skills/product-incubation/         # SKILL.md
 README.md                          # User-facing docs
 ```

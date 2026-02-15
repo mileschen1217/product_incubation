@@ -2,6 +2,8 @@
 
 Migrating a project from the old marker-based product-incubation plugin (v0.3.x) to the new OpenSpec-backed flow (v0.4.0+).
 
+> **v0.5.0+ users:** The `/product-incubation:import` command automates most of this process. Run `/product-incubation:init` first, then `/product-incubation:import` — it scans your existing docs, maps them to the 17 areas, generates OpenSpec specs, and lets you review/approve each one. The manual steps below are only needed if you prefer full control or have edge cases the import command doesn't handle.
+
 ## Prerequisites
 
 Before starting:
@@ -100,20 +102,26 @@ Rules:
 
 **For document areas** (VIS, KPI, DEC, ROAD):
 
-Convert to area-specific section format:
+Convert to area-specific section format. **Important:** Each `### Requirement:` block must include a one-line SHALL statement before the sections to pass OpenSpec validation.
 
 ```markdown
 ## ADDED Requirements
 
 ### Requirement: <title>
+This requirement SHALL define the <area-specific content>.
+
+#### <Area-specific section 1>
 <content>
 
-<!-- Use area-specific sections instead of scenarios: -->
-<!-- VIS:  Problem Statement / Target Users / Market Context -->
-<!-- KPI:  Metric / Target / Measurement Method -->
-<!-- DEC:  Context / Decision / Consequences / Alternatives Considered -->
-<!-- ROAD: Phase / Milestones / Priority / Timeline -->
+#### <Area-specific section 2>
+<content>
 ```
+
+Area-specific sections:
+- VIS: Problem Statement / Target Users / Market Context
+- KPI: Metric / Target / Measurement Method
+- DEC: Context / Decision / Consequences / Alternatives Considered
+- ROAD: Phase / Milestones / Priority / Timeline
 
 ## Step 5: Migrate in-progress areas to `openspec/changes/`
 
