@@ -80,7 +80,7 @@ This creates a local copy at `openspec/schemas/product-incubation/`.
 
 Then copy the plugin's custom schema files over the forked copy:
 
-1. Read each file from the plugin's `schemas/product-incubation/` directory (schema.yaml and all templates)
+1. Read each file from this plugin's `schemas/product-incubation/` directory (relative to this command file: `../schemas/product-incubation/`). Read `schema.yaml` and all files under `templates/`.
 2. Write them to `openspec/schemas/product-incubation/` (overwriting the forked spec-driven files)
 
 This gives the project a product-incubation schema with the dual-format spec support (requirement + document areas).
@@ -208,7 +208,7 @@ Skipped (out of scope):
   {list skipped prefixes with reason, e.g., "OBS (product-only)"}
 
 Next steps:
-  1. Create your first change: `openspec change new <name>`
+  1. Create your first change: `openspec new change <name>`
   2. Write a proposal covering the earliest area for your phase
   3. Run `/product-incubation:status` to check area coverage
 ```

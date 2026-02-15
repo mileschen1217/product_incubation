@@ -129,7 +129,7 @@ Product incubation uses OpenSpec as the spec lifecycle engine. Each area maps to
 ### How it works
 
 1. **`/product-incubation:init`** installs the `product-incubation` schema and generates `openspec/incubation.yaml` (the manifest mapping all 17 areas)
-2. **`openspec change new <name>`** starts work on an area — write a proposal, then specs
+2. **`openspec new change <name>`** starts work on an area — write a proposal, then specs
 3. **`openspec archive <name>`** moves completed specs from `changes/` to `specs/` (done)
 4. **`/product-incubation:status`** reads the manifest and OpenSpec file structure to report area coverage
 
@@ -204,6 +204,9 @@ DISCOVER (Areas 1-3) -> SPECIFY (Areas 4-7) -> ARCHITECT (Areas 8-12) -> BUILD -
 |---------|-------------|
 | `/product-incubation:init` | Initialize OpenSpec with product-incubation schema and manifest |
 | `/product-incubation:status` | Read manifest and OpenSpec state, report area completeness dashboard |
+| `/product-incubation:import` | Import existing docs into OpenSpec specs |
+| `/product-incubation:review` | Rubric-driven spec quality review |
+| `/product-incubation:set-phase` | Update the current lifecycle phase in the manifest |
 
 ## Common Mistakes
 
@@ -214,4 +217,4 @@ DISCOVER (Areas 1-3) -> SPECIFY (Areas 4-7) -> ARCHITECT (Areas 8-12) -> BUILD -
 | Treat phases as waterfall | Iterate within phases. Phase gates are checkpoints, not walls |
 | Marking specs done without verifying | Run tests and review code before archiving a change |
 | Separate "tech stack" area | Tech choices are decisions — use DEC prefix |
-| Creating specs outside OpenSpec | Always use `openspec change new` — the file lifecycle drives status |
+| Creating specs outside OpenSpec | Always use `openspec new change` — the file lifecycle drives status |

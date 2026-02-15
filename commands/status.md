@@ -71,12 +71,35 @@ For each active area:
 | No spec found anywhere | Not started | `○` |
 | Area not in active set (scope-filtered out) | Skipped | `—` |
 
-### 6. Calculate area percentages
+### 6. Measure section-level completeness
 
-For each of the 5 groups (WHY, WHAT, HOW, QUALITY, TRACKING):
-- Count active areas with status `done` vs total active areas in the group
-- Percentage = `done / total_active * 100` (round to nearest integer)
-- If no active areas in a group, show `—`
+For each area with a **done** or **in-progress** spec, read the spec file and measure completeness based on area type.
+
+#### Requirement areas (USR, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, TEST, OBS, DEPLOY, OPS)
+
+Count `#### Scenario:` blocks in the spec file. Display as:
+
+- `5 scenarios` (if 5 `#### Scenario:` blocks found)
+- `1 scenario` (singular if exactly 1)
+
+#### Document areas (VIS, KPI, DEC, ROAD)
+
+Count how many expected sections are filled (contain more than just a heading — at least one line of substantive content below):
+
+| Area | Expected sections |
+|------|-------------------|
+| VIS | Problem Statement, Target Users, Market Context (3 sections) |
+| KPI | Metric, Target, Measurement Method (3 sections) |
+| DEC | Context, Decision, Consequences, Alternatives Considered (4 sections) |
+| ROAD | Phase, Milestones, Priority, Timeline (4 sections) |
+
+Display as: `2/3 sections` or `4/4 sections`
+
+#### Areas without specs
+
+- In-progress areas with no spec content yet: show `(in progress)`
+- Not-started areas: show `(not started)`
+- Skipped areas: show `(skipped)`
 
 ### 7. Output the dashboard
 
@@ -87,31 +110,31 @@ Product Status — {Project Name}
 ══════════════════════════════════════
 
 WHY
-  ✓ Problem & Vision ················ 100%  (1/1)
-  ◐ User Scenarios ·················· 0%    (0/1)
-  ○ Success Metrics ·················  0%   (0/1)
+  ✓ Problem & Vision ················ 2/3 sections
+  ◐ User Scenarios ·················· 3 scenarios (in progress)
+  ○ Success Metrics ················· (not started)
 
 WHAT
-  ◐ Functional Spec ················· 0%    (0/1)
-  ○ Data Model ······················  0%   (0/1)
-  ✓ API Contract ···················· 100%  (1/1)
-  ○ UX/UI Spec ······················ 0%   (0/1)
+  ◐ Functional Spec ················· 5 scenarios (in progress)
+  ○ Data Model ······················ (not started)
+  ✓ API Contract ···················· 8 scenarios
+  ○ UX/UI Spec ······················ (not started)
 
 HOW
-  ○ Tech Architecture ···············  0%   (0/1)
-  ◐ Security ························  0%   (0/1)
-  — Performance ·····················  —    (skipped)
-  — i18n / L10n ·····················  —    (skipped)
-  ✓ Decision Log ···················· 100%  (1/1)
+  ○ Tech Architecture ··············· (not started)
+  ◐ Security ························ 2 scenarios (in progress)
+  — Performance ····················· (skipped)
+  — i18n / L10n ····················· (skipped)
+  ✓ Decision Log ···················· 4/4 sections
 
 QUALITY
-  ○ Test Strategy ···················  0%   (0/1)
-  — Observability ···················  —    (skipped)
-  — Deployment ······················  —    (skipped)
-  — Maintenance & Ops ···············  —    (skipped)
+  ○ Test Strategy ··················· (not started)
+  — Observability ··················· (skipped)
+  — Deployment ······················ (skipped)
+  — Maintenance & Ops ··············· (skipped)
 
 TRACKING
-  — Roadmap & Milestones ············  —    (skipped)
+  — Roadmap & Milestones ············ (skipped)
 
 ══════════════════════════════════════
 Summary
@@ -120,20 +143,45 @@ Summary
   Done: {d}/{n} ({pct}%)  ·  In progress: {p}/{n}
 
 Gaps: {list active areas with status "not started"}
-Next: {1-2 suggested actions based on gaps and current phase}
 
-Create a change with `openspec change new <name>` to start working on a gap.
+Next: {phase-aware guidance — see step 8}
+
+Create a change with `openspec new change <name>` to start working on a gap.
 ```
 
 **Area-line rules:**
-- `✓` if the area has an archived spec (done)
-- `◐` if the area has a change spec but no archived spec (in progress)
-- `○` if the area is active but has no specs anywhere (not started)
-- `—` if the area is filtered out by scope mode (skipped)
-- Percentage is always `done / 1 * 100` per area (each area counts as one capability)
-- For done areas: `(1/1)`. For not-done active areas: `(0/1)`. For skipped: `(skipped)`.
+- `✓` for done areas — show section/scenario count
+- `◐` for in-progress areas — show section/scenario count with `(in progress)` suffix
+- `○` for not-started active areas — show `(not started)`
+- `—` for skipped areas — show `(skipped)`
 
-### 8. Rules
+### 8. Phase-aware guidance
+
+Generate the "Next" section based on the current phase and area status.
+
+**Phase-to-areas mapping:**
+
+| Phase | Areas |
+|-------|-------|
+| DISCOVER | VIS, USR, KPI (areas 1-3) |
+| SPECIFY | FUNC, DATA, API, UX (areas 4-7) |
+| ARCHITECT | ARCH, SEC, PERF, I18N, DEC (areas 8-12) |
+| VALIDATE | TEST, OBS (areas 13-14) |
+| SHIP | DEPLOY, OPS, ROAD (areas 15-17) |
+
+**Priority order for suggestions:**
+
+1. **Not-started areas in the current phase** — highest priority. Suggest starting these first.
+2. **In-progress areas in the current phase** — suggest completing these.
+3. **Not-started areas in earlier phases** — suggest backfilling gaps from previous phases.
+4. **Areas in the next phase** — if current phase is fully done, suggest advancing.
+
+Generate 1-2 concrete suggestions, e.g.:
+- `Start SEC (Security) — current phase ARCHITECT has gaps`
+- `Complete FUNC (in progress, 3 scenarios) — SPECIFY phase not yet done`
+- `All SPECIFY areas done — advance to ARCHITECT phase (ARCH, SEC, PERF, DEC)`
+
+### 9. Rules
 
 - **Do NOT create or modify any files.** This command is read-only.
 - **Do NOT write the report to a file** unless the user explicitly asks for it.
