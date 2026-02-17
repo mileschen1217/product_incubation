@@ -45,14 +45,12 @@ Done: 5/12  ·  In progress: 3/12
 | `/product-incubation:status` | Read manifest and OpenSpec state, report area completeness dashboard |
 | `/product-incubation:import` | Import existing docs into OpenSpec specs |
 | `/product-incubation:review` | Rubric-driven spec quality review |
-| `/product-incubation:set-phase` | Update the current lifecycle phase in the manifest |
 
 ### `/product-incubation:init`
 
-Sets up the product incubation framework for your project. Asks two questions:
+Sets up the product incubation framework for your project. Asks one question:
 
-1. **Scope mode** — Product (full 17 areas) or Feature (focused subset)
-2. **Phase** — DISCOVER, SPECIFY, ARCHITECT, or BUILD+
+1. **Scope mode** — Product (full 17 areas) or Feature (focused subset, with domain selection)
 
 Installs the `product-incubation` OpenSpec schema and generates `openspec/incubation.yaml` (the manifest mapping all 17 areas to OpenSpec capabilities).
 
@@ -61,7 +59,6 @@ Installs the `product-incubation` OpenSpec schema and generates `openspec/incuba
 > /product-incubation:init
 What are you incubating? → Feature
 Which domains? → Frontend, Backend
-Which phase? → SPECIFY
 
 Schema: product-incubation (installed to openspec/schemas/)
 Manifest: openspec/incubation.yaml (17 areas defined)
@@ -75,7 +72,7 @@ Reads the incubation manifest and OpenSpec file structure:
 - Specs in `openspec/changes/*/specs/` → in progress
 - Not found → not started
 
-Shows per-area status with section-level completeness (scenario counts for requirement areas, filled sections for document areas) and phase-aware guidance for next steps.
+Shows per-area status with section-level completeness (scenario counts for requirement areas, filled sections for document areas) and group-based guidance for next steps.
 
 ### `/product-incubation:import`
 
@@ -125,10 +122,6 @@ Summary: 3 suggestions across 2 areas
 Priority: SEC ↔ API gap, FUNC error cases
 ```
 
-### `/product-incubation:set-phase`
-
-Updates the lifecycle phase in the incubation manifest. Shows the current phase, presents the full lifecycle (DISCOVER → SPECIFY → ARCHITECT → BUILD → VALIDATE → SHIP), and lets you select the new phase.
-
 ## Product vs Feature Mode
 
 | | Product Mode | Feature Mode |
@@ -174,12 +167,6 @@ Updates the lifecycle phase in the incubation manifest. Shows the current phase,
 | `domain:frontend` | When work touches frontend |
 | `domain:backend` | When work touches backend |
 | `domain:infra` | When work touches deployment/infra |
-
-## Lifecycle Phases
-
-```
-DISCOVER (1-3) -> SPECIFY (4-7) -> ARCHITECT (8-12) -> BUILD -> VALIDATE (13-14) -> SHIP (15-17)
-```
 
 ## Typical Workflow
 

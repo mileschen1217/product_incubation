@@ -21,7 +21,6 @@ Stop here — the import command requires an initialized project.
 Extract from the manifest:
 - `mode` (product or feature)
 - `domains` (selected domain list)
-- `phase` (current phase)
 - `areas` (all 17 area definitions with prefix, capability, scope, group, type)
 
 Also read the `product-incubation` skill to load the area reference (types, expected sections, scope tags).

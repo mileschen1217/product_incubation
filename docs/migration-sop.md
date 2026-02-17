@@ -18,7 +18,7 @@ Run `/product-incubation:init` and follow the prompts. This will:
 
 - Run `openspec init --tools claude` (creates `openspec/` directory)
 - Fork and install the `product-incubation` schema
-- Ask scope mode (Product/Feature) and phase
+- Ask scope mode (Product/Feature)
 - Generate `openspec/incubation.yaml` manifest with all 17 areas
 
 After init, verify:

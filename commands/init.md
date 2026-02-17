@@ -1,5 +1,5 @@
 ---
-description: Initialize product incubation with OpenSpec — installs schema, configures scope/phase, generates manifest. Requires openspec CLI.
+description: Initialize product incubation with OpenSpec — installs schema, configures scope, generates manifest. Requires openspec CLI.
 allowed-tools: [Read, Write, Glob, Grep, Bash, AskUserQuestion]
 disable-model-invocation: true
 ---
@@ -12,7 +12,7 @@ You are setting up the product incubation framework for a project using OpenSpec
 
 ### 1. Read the SKILL.md
 
-Read the `product-incubation` skill to load the 17-area checklist, scope tags, area types, and lifecycle phases.
+Read the `product-incubation` skill to load the 17-area checklist, scope tags, and area types.
 
 ### 2. Check prerequisites
 
@@ -57,18 +57,7 @@ Then determine the area set:
 - **Add `I18N`** if frontend is selected and the project has multi-locale support
 - **Add `DEPLOY`** if infra is selected
 
-### 4. Ask which phase
-
-Use AskUserQuestion to ask:
-
-> **Which phase is this project/feature in?**
->
-> - **DISCOVER** — Starting fresh, need to define problem/vision/users (Areas 1-3)
-> - **SPECIFY** — Problem is clear, need to spec features/data/API/UX (Areas 4-7)
-> - **ARCHITECT** — Specs exist, need tech architecture/security/perf/i18n (Areas 8-12)
-> - **BUILD+** — Architecture is set, need build/validate/ship scaffolding (Areas 13-17)
-
-### 5. Install schema
+### 4. Install schema
 
 Run via Bash:
 
@@ -85,9 +74,9 @@ Then copy the plugin's custom schema files over the forked copy:
 
 This gives the project a product-incubation schema with the dual-format spec support (requirement + document areas).
 
-### 6. Generate manifest
+### 5. Generate manifest
 
-Create `openspec/incubation.yaml` with the full 17-area definition. Use the scope mode, domains, and phase from user answers.
+Create `openspec/incubation.yaml` with the full 17-area definition. Use the scope mode and domains from user answers.
 
 **Manifest format:**
 
@@ -95,7 +84,6 @@ Create `openspec/incubation.yaml` with the full 17-area definition. Use the scop
 schema: product-incubation
 mode: {product | feature}
 domains: [{selected domains, e.g., [frontend, backend]}]
-phase: {DISCOVER | SPECIFY | ARCHITECT | BUILD+}
 areas:
   - prefix: VIS
     capability: problem-vision
@@ -188,7 +176,7 @@ areas:
 - Always write all 17 areas to the manifest regardless of scope mode. The `scope` field on each area is used by the status command to filter display — the manifest is the complete definition.
 - Areas MUST follow the exact canonical order shown above: VIS, USR, KPI, FUNC, DATA, API, UX, ARCH, SEC, PERF, I18N, DEC, TEST, OBS, DEPLOY, OPS, ROAD. The status dashboard relies on this ordering to group areas correctly.
 
-### 7. Summary
+### 6. Summary
 
 Output a summary:
 
@@ -197,7 +185,6 @@ Product Incubation — Init Complete
 ═══════════════════════════════════
 
 Mode: {Product | Feature (frontend, backend)}
-Phase: {SELECTED_PHASE}
 Schema: product-incubation (installed to openspec/schemas/)
 Manifest: openspec/incubation.yaml (17 areas defined)
 
@@ -209,7 +196,7 @@ Skipped (out of scope):
 
 Next steps:
   1. Create your first change: `openspec new change <name>`
-  2. Write a proposal covering the earliest area for your phase
+  2. Write a proposal covering the earliest not-started area
   3. Run `/product-incubation:status` to check area coverage
 ```
 

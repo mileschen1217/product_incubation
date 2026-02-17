@@ -12,7 +12,7 @@ You are reading this project's OpenSpec state and incubation manifest to produce
 
 ### 1. Read manifest
 
-Read `openspec/incubation.yaml` for area definitions, scope mode, domains, and phase.
+Read `openspec/incubation.yaml` for area definitions and scope mode.
 
 If the file doesn't exist, report:
 
@@ -21,7 +21,6 @@ If the file doesn't exist, report:
 Extract:
 - `mode` (product or feature)
 - `domains` (selected domain list)
-- `phase` (current phase)
 - `areas` (all 17 area definitions with prefix, capability, scope, group, type)
 
 ### 2. Determine active areas
@@ -138,13 +137,13 @@ TRACKING
 
 ══════════════════════════════════════
 Summary
-  Mode: {product | feature (domains)}  ·  Phase: {phase}
+  Mode: {product | feature (domains)}
   Active: {n}/17 areas
   Done: {d}/{n} ({pct}%)  ·  In progress: {p}/{n}
 
 Gaps: {list active areas with status "not started"}
 
-Next: {phase-aware guidance — see step 8}
+Next: {group-based guidance — see step 8}
 
 Create a change with `openspec new change <name>` to start working on a gap.
 ```
@@ -155,31 +154,20 @@ Create a change with `openspec new change <name>` to start working on a gap.
 - `○` for not-started active areas — show `(not started)`
 - `—` for skipped areas — show `(skipped)`
 
-### 8. Phase-aware guidance
+### 8. Group-based guidance
 
-Generate the "Next" section based on the current phase and area status.
-
-**Phase-to-areas mapping:**
-
-| Phase | Areas |
-|-------|-------|
-| DISCOVER | VIS, USR, KPI (areas 1-3) |
-| SPECIFY | FUNC, DATA, API, UX (areas 4-7) |
-| ARCHITECT | ARCH, SEC, PERF, I18N, DEC (areas 8-12) |
-| VALIDATE | TEST, OBS (areas 13-14) |
-| SHIP | DEPLOY, OPS, ROAD (areas 15-17) |
+Generate the "Next" section based on group order and area status.
 
 **Priority order for suggestions:**
 
-1. **Not-started areas in the current phase** — highest priority. Suggest starting these first.
-2. **In-progress areas in the current phase** — suggest completing these.
-3. **Not-started areas in earlier phases** — suggest backfilling gaps from previous phases.
-4. **Areas in the next phase** — if current phase is fully done, suggest advancing.
+1. **Complete in-progress areas** — finish what's already started, in group order (WHY → WHAT → HOW → QUALITY → TRACKING).
+2. **Start not-started areas in the earliest incomplete group** — work through groups in order.
+3. **Advance to next group** — if the current group is fully done, suggest moving to the next group.
 
 Generate 1-2 concrete suggestions, e.g.:
-- `Start SEC (Security) — current phase ARCHITECT has gaps`
-- `Complete FUNC (in progress, 3 scenarios) — SPECIFY phase not yet done`
-- `All SPECIFY areas done — advance to ARCHITECT phase (ARCH, SEC, PERF, DEC)`
+- `Complete FUNC (in progress, 3 scenarios) — WHAT group has gaps`
+- `Start SEC (Security) — next not-started area in HOW group`
+- `All WHAT areas done — advance to HOW group (ARCH, SEC, PERF, DEC)`
 
 ### 9. Rules
 

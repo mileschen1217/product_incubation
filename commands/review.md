@@ -12,7 +12,7 @@ You are reviewing this project's OpenSpec specs against the product incubation r
 
 ### 1. Load context
 
-Read `openspec/incubation.yaml` for area definitions, scope mode, domains, and phase.
+Read `openspec/incubation.yaml` for area definitions and scope mode.
 
 If the file doesn't exist, report:
 

@@ -156,48 +156,6 @@ Each area entry:
   type: requirement
 ```
 
-## Lifecycle Phases
-
-```
-DISCOVER (Areas 1-3) -> SPECIFY (Areas 4-7) -> ARCHITECT (Areas 8-12) -> BUILD -> VALIDATE (Areas 13-14) -> SHIP (Areas 15-17)
-```
-
-### Phase 1: DISCOVER
-
-**Entry:** Idea or problem statement exists.
-**Do:** Document problem, target users, market context, user scenarios, success metrics.
-**Exit:** Areas 1-3 have archived specs in `openspec/specs/`.
-
-### Phase 2: SPECIFY
-
-**Entry:** Phase 1 complete.
-**Do:** Write functional spec, data model, API contract, UX spec. Define scope boundaries (what's NOT included).
-**Exit:** Areas 4-7 have archived specs.
-
-### Phase 3: ARCHITECT
-
-**Entry:** Phase 2 complete.
-**Do:** Design system architecture, plan security/perf/i18n. Write decision records for non-obvious choices (including tech stack).
-**Exit:** Areas 8-12 have archived specs.
-
-### Phase 4: BUILD
-
-**Entry:** Phase 3 complete.
-**Do:** Implement features. Use OpenSpec changes to track work — create changes, complete tasks, archive when done.
-**Exit:** All FUNC requirements implemented and specs archived.
-
-### Phase 5: VALIDATE
-
-**Entry:** Core implementation complete.
-**Do:** Execute test strategy, set up observability. Verify coverage against spec.
-**Exit:** Areas 13-14 have archived specs.
-
-### Phase 6: SHIP
-
-**Entry:** Phase 5 complete.
-**Do:** Set up deployment pipeline, write runbooks, document ops procedures.
-**Exit:** Areas 15-17 have archived specs. Product is production-ready.
-
 ## Commands
 
 | Command | Description |
@@ -206,15 +164,14 @@ DISCOVER (Areas 1-3) -> SPECIFY (Areas 4-7) -> ARCHITECT (Areas 8-12) -> BUILD -
 | `/product-incubation:status` | Read manifest and OpenSpec state, report area completeness dashboard |
 | `/product-incubation:import` | Import existing docs into OpenSpec specs |
 | `/product-incubation:review` | Rubric-driven spec quality review |
-| `/product-incubation:set-phase` | Update the current lifecycle phase in the manifest |
 
 ## Common Mistakes
 
 | Mistake | Fix |
 |---------|-----|
 | Skip HOW layer, bolt on security/i18n later | Plan all HOW areas before BUILD |
-| Over-specify early phases | Each phase refines previous — start broad, narrow down |
-| Treat phases as waterfall | Iterate within phases. Phase gates are checkpoints, not walls |
+| Over-specify early groups | Each group refines previous — start broad, narrow down |
+| Treat groups as waterfall | Iterate within groups. Group boundaries are checkpoints, not walls |
 | Marking specs done without verifying | Run tests and review code before archiving a change |
 | Separate "tech stack" area | Tech choices are decisions — use DEC prefix |
 | Creating specs outside OpenSpec | Always use `openspec new change` — the file lifecycle drives status |

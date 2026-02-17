@@ -1,6 +1,6 @@
 {
   "name": "product-incubation",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Systematic product & feature incubation — 17-area checklist with OpenSpec-backed spec lifecycle, scope tags, product and feature modes",
   "author": {
     "name": "Miles Chen"
